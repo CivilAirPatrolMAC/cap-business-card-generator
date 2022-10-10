@@ -262,7 +262,12 @@
 				padding: 50px;
 			}
 			div.left {
-				flex: 0 1 40%;
+				background: #fff;
+				flex: 1 1 40%;
+				min-width: 400px;
+				max-width: 600px;
+				overflow-y: auto;
+				border-right: 1px solid #f3f4f6;
 			}
 			div.left > form > div {
 				display: flex;
@@ -290,9 +295,7 @@
 		</style>
 		<script src="https://unpkg.com/pdf-lib"></script>
 		<script type="text/javascript">
-			let font, fontBold;
-
-			async function modifyPdf() {
+			async function generatePdf() {
 				const url = "source.pdf";
 
 				const existingPdfBytes = await fetch(url).then((res) =>
@@ -312,8 +315,6 @@
 
 				const pages = pdfDoc.getPages();
 				const page = pages[0];
-				const { width, height } = page.getSize();
-
 				let rowY = 728;
 				const shiftY = 144.1;
 				const colX = 185.2;
@@ -384,6 +385,7 @@
 
 					if (gradeTextWidth > maxWidth || nameTextWidth > maxWidth) {
 						$("#name").addClass("error");
+						isError = true;
 					}
 				}
 
@@ -406,10 +408,12 @@
 
 					if (titleTextWidth > maxWidth) {
 						$("#title").addClass("error");
+						isError = true;
 					}
 
 					if (unitTextWidth > maxWidth) {
 						$("#unit").addClass("error");
+						isError = true;
 					}
 
 					page.drawText(
@@ -441,6 +445,7 @@
 
 					if (addressTextWidth > maxWidth) {
 						$("#address").addClass("error");
+						isError = true;
 					}
 
 					page.drawText(vals.address, {
@@ -461,6 +466,7 @@
 
 					if (emailTextWidth > maxWidth) {
 						$("#email").addClass("error");
+						isError = true;
 					}
 
 					if (vals.phone_1) {
@@ -494,8 +500,27 @@
 						color: PDFLib.rgb(0, 0, 0),
 					});
 				}
+
+				placeError(page);
 			}
 
+			function placeError(page) {
+				if (isError) {
+					const { width, height } = page.getSize();
+
+					page.drawText("TEXT IS TOO LONG", {
+						x: 140,
+						y: 700,
+						size: 50,
+						font: font,
+						color: PDFLib.rgb(1, 0, 0),
+						rotate: PDFLib.degrees(-45),
+					});
+				}
+			}
+
+			let font, fontBold;
+			let isError = false;
 			let grade_type = "Senior";
 
 			const vals = {
@@ -523,7 +548,7 @@
 			};
 
 			$(document).ready(function () {
-				updateOutput();
+				generatePdf();
 
 				$("#grade_type").change(function () {
 					grade_type = $(this).val();
@@ -554,11 +579,13 @@
 
 			function updateInput() {
 				vals["grade"] = $("#grade").val();
+
 				if ($("#name").val()) {
 					vals["name"] = $("#name").val();
 				} else {
 					vals["name"] = "Jane Doe";
 				}
+
 				vals["title"] = $("#title").val();
 				vals["unit"] = $("#unit").val();
 				vals["address"] = $("#address").val();
@@ -574,11 +601,9 @@
 				$("#address").removeClass("error");
 				$("#email").removeClass("error");
 
-				updateOutput();
-			}
+				isError = false;
 
-			function updateOutput() {
-				modifyPdf();
+				generatePdf();
 			}
 		</script>
 	</head>
@@ -720,6 +745,11 @@ Somewhere, TX 12345"
 				</div>
 				<button type="submit">Save Changes</button>
 			</form>
+
+			<footer>
+				Version 1. Last modified on October 9, 2022. Created by
+				<a href="mailto:mcongrove@cap.gov">Lt Col Matthew Congrove</a>.
+			</footer>
 		</div>
 
 		<div class="right">
