@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>Civil Air Patrol Business Card Generator</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="shortcut icon" href="favicon.png" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500&display=block"
+			rel="stylesheet"
+		/>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<style type="text/css">
+			html,
+			body,
+			div,
+			span,
+			applet,
+			object,
+			iframe,
+			h1,
+			h2,
+			h3,
+			h4,
+			h5,
+			h6,
+			p,
+			blockquote,
+			pre,
+			a,
+			abbr,
+			acronym,
+			address,
+			big,
+			cite,
+			code,
+			del,
+			dfn,
+			em,
+			img,
+			ins,
+			kbd,
+			q,
+			s,
+			samp,
+			small,
+			strike,
+			strong,
+			sub,
+			sup,
+			tt,
+			var,
+			b,
+			u,
+			i,
+			center,
+			dl,
+			dt,
+			dd,
+			ol,
+			ul,
+			li,
+			fieldset,
+			form,
+			label,
+			legend,
+			table,
+			caption,
+			tbody,
+			tfoot,
+			thead,
+			tr,
+			th,
+			td,
+			article,
+			aside,
+			canvas,
+			details,
+			embed,
+			figure,
+			figcaption,
+			footer,
+			header,
+			hgroup,
+			menu,
+			nav,
+			output,
+			ruby,
+			section,
+			summary,
+			time,
+			mark,
+			audio,
+			video {
+				margin: 0;
+				padding: 0;
+				border: 0;
+				font-size: 100%;
+				font: inherit;
+				vertical-align: baseline;
+			}
+			/* HTML5 display-role reset for older browsers */
+			article,
+			aside,
+			details,
+			figcaption,
+			figure,
+			footer,
+			header,
+			hgroup,
+			menu,
+			nav,
+			section {
+				display: block;
+			}
+			body {
+				line-height: 1;
+			}
+			ol,
+			ul {
+				list-style: none;
+			}
+			blockquote,
+			q {
+				quotes: none;
+			}
+			blockquote:before,
+			blockquote:after,
+			q:before,
+			q:after {
+				content: "";
+				content: none;
+			}
+			table {
+				border-collapse: collapse;
+				border-spacing: 0;
+			}
+
+			/*****/
+
+			body {
+				font-family: "Ubuntu", "Mier B", -apple-system,
+					BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+					sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+					"Segoe UI Symbol";
+				color: rgb(0, 0, 0);
+				line-height: 1.4;
+				font-weight: 400;
+				font-size: 1em;
+				height: 100vh;
+				background: #f3f4f6;
+				display: flex;
+				flex-direction: row;
+				flex-wrap: nowrap;
+				justify-content: space-between;
+				align-items: stretch;
+				align-content: stretch;
+			}
+			a {
+				color: rgb(0, 20, 137);
+			}
+			h1 {
+				font-family: "Ubuntu", "Mier B", -apple-system,
+					BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+					sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+					"Segoe UI Symbol";
+				color: rgb(186, 12, 47);
+				font-size: 30px;
+				line-height: 1.3;
+				font-weight: 500;
+				margin: 0 0 10px;
+			}
+			p {
+				margin: 5px 0;
+			}
+			input,
+			select,
+			textarea {
+				border: 1px solid rgb(158, 162, 162);
+				border-radius: 5px;
+				font-size: 16px;
+				line-height: 1.3;
+				font-weight: 400;
+				padding: 10px;
+				background-color: rgb(255, 255, 255);
+				color: rgb(0, 0, 0);
+				font-family: "Ubuntu", "Mier B", -apple-system,
+					BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+					sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+					"Segoe UI Symbol";
+			}
+			form {
+				margin: 25px 0 0;
+				border-top: 1px solid #f3f4f6;
+			}
+			label {
+				flex: 1 0 auto;
+				padding: 0 0 10px;
+				display: flex;
+				align-items: center;
+				white-space: nowrap;
+			}
+			label span {
+				color: #fc2050;
+			}
+			label span.note {
+				color: rgb(158, 162, 162);
+				font-size: 12px;
+				flex: 1 1 100%;
+				text-align: right;
+			}
+			button,
+			a.button {
+				transition: all 0.2s ease-in-out;
+				font-family: "Ubuntu", "Mier B", -apple-system,
+					BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+					sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+					"Segoe UI Symbol";
+				color: rgb(255, 255, 255);
+				font-size: 16px;
+				line-height: 16px;
+				height: 38px;
+				font-weight: 400;
+				border-width: 0;
+				border-radius: 5px;
+				background-color: rgb(0, 20, 137);
+				padding: 10px 20px;
+				cursor: pointer;
+				user-select: none;
+				margin-top: 15px;
+				text-decoration: none;
+			}
+			button:hover,
+			a.button:hover {
+				color: rgb(255, 255, 255);
+				border-color: rgb(0, 12, 92);
+				background-color: rgb(0, 14, 102);
+			}
+			footer {
+				font-family: "Ubuntu", "Mier B", -apple-system,
+					BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+					sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+					"Segoe UI Symbol";
+				color: rgb(158, 162, 162);
+				font-size: 12px;
+				padding: 50px 0 20px;
+				background: #fff;
+			}
+			footer a {
+				color: inherit;
+			}
+			body > div {
+				padding: 50px;
+			}
+			div.left {
+				flex: 0 1 40%;
+			}
+			div.left > form > div {
+				display: flex;
+				flex-direction: column;
+				flex-wrap: nowrap;
+				justify-content: flex-start;
+				align-content: flex-start;
+				margin: 0 0 15px;
+			}
+			div.left input[type="text"] {
+				flex: 1 1 100%;
+			}
+			div.left textarea {
+				height: 64px;
+			}
+			div.left div.dual {
+				display: flex;
+				flex-direction: row;
+				margin-bottom: 15px;
+				gap: 15px;
+			}
+			div.right {
+				flex: 1 1 60%;
+			}
+		</style>
+		<script src="https://unpkg.com/pdf-lib"></script>
+		<script type="text/javascript">
+			let font, fontBold;
+
+			async function modifyPdf() {
+				const url = "source.pdf";
+
+				const existingPdfBytes = await fetch(url).then((res) =>
+					res.arrayBuffer()
+				);
+
+				const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
+
+				pdfDoc.setTitle("CAP Business Card Template");
+				pdfDoc.setAuthor("Civil Air Patrol");
+
+				font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+
+				fontBold = await pdfDoc.embedFont(
+					PDFLib.StandardFonts.HelveticaBold
+				);
+
+				const pages = pdfDoc.getPages();
+				const page = pages[0];
+				const { width, height } = page.getSize();
+
+				let rowY = 728;
+				const shiftY = 144.1;
+				const colX = 185.2;
+
+				placeText(page, colX, rowY);
+				placeText(page, colX + 252, rowY);
+
+				rowY -= shiftY;
+
+				placeText(page, colX, rowY);
+				placeText(page, colX + 252, rowY);
+
+				rowY -= shiftY;
+
+				placeText(page, colX, rowY);
+				placeText(page, colX + 252, rowY);
+
+				rowY -= shiftY;
+
+				placeText(page, colX, rowY);
+				placeText(page, colX + 252, rowY);
+
+				rowY -= shiftY;
+
+				placeText(page, colX, rowY);
+				placeText(page, colX + 252, rowY);
+
+				const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+
+				document.getElementById("pdf").src = pdfDataUri;
+			}
+
+			function placeText(page, x, y) {
+				const maxWidth = 105;
+				let gradeNameIsMultiline = false;
+				let gradeNameText = "";
+				let gradeText = (
+					(grade_type === "Cadet" ? "Cadet " : "") + vals.grade
+				).toUpperCase();
+				const gradeTextWidth = fontBold.widthOfTextAtSize(gradeText, 8);
+
+				if (gradeTextWidth > maxWidth && grade_type === "Cadet") {
+					gradeText = "C/" + vals.grade.toUpperCase();
+				}
+
+				let nameText = vals.name.toUpperCase();
+				gradeNameText = gradeText + " " + nameText;
+				let gradeNameTextWidth = fontBold.widthOfTextAtSize(
+					gradeNameText,
+					8
+				);
+
+				if (gradeNameTextWidth > maxWidth) {
+					gradeNameText = gradeText + "\n" + nameText;
+
+					gradeNameIsMultiline = true;
+				}
+
+				page.drawText(gradeNameText, {
+					x: x,
+					y: y,
+					size: 8,
+					lineHeight: 9,
+					font: fontBold,
+					color: PDFLib.rgb(0, 0, 0),
+				});
+
+				if (vals.title || vals.unit) {
+					page.drawText(
+						vals.title +
+							(vals.title && vals.unit ? "\n" : "") +
+							vals.unit,
+						{
+							x: x,
+							y: y - (gradeNameIsMultiline ? 18 : 9),
+							size: 7,
+							lineHeight: 8,
+							font: font,
+							color: PDFLib.rgb(0, 0, 0),
+						}
+					);
+				}
+
+				if (vals.address) {
+					page.drawText(vals.address, {
+						x: x,
+						y: y - (gradeNameIsMultiline ? 44.5 : 38.5),
+						size: 7,
+						lineHeight: 8,
+						font: font,
+						color: PDFLib.rgb(0, 0, 0),
+					});
+				}
+
+				if (vals.phone_1 || vals.phone_2 || vals.email) {
+					const contactText = [];
+
+					if (vals.phone_1) {
+						contactText.push(
+							"(" + vals.phone_1_type + ") " + vals.phone_1
+						);
+					}
+
+					if (vals.phone_2) {
+						contactText.push(
+							"(" + vals.phone_2_type + ") " + vals.phone_2
+						);
+					}
+
+					if (vals.email) {
+						contactText.push(vals.email);
+					}
+
+					if (contactText.length === 2) {
+						contactText.unshift("");
+					} else if (contactText.length === 1) {
+						contactText.unshift("", "");
+					}
+
+					page.drawText(contactText.join("\n"), {
+						x: x,
+						y: y - 79.5,
+						size: 7,
+						lineHeight: 8,
+						font: font,
+						color: PDFLib.rgb(0, 0, 0),
+					});
+				}
+			}
+
+			let grade_type = "Senior";
+
+			const vals = {
+				grade: "2nd Lt.",
+				name: "Jane Doe",
+				title: "",
+				unit: "",
+				address: "",
+				phone_1_type: "M",
+				phone_1: "",
+				phone_2_type: "M",
+				phone_2: "",
+				email: "",
+				// grade: "Lt. Col.",
+				// name: "Matthew Congrove",
+				// title: "Public Affairs Staff Assistant",
+				// unit: "National Headquarters",
+				// address:
+				// 	"123 Flight Line Road\nBuilding C\nSomewhere, TX 12345",
+				// phone_1_type: "M",
+				// phone_1: "555-555-5555",
+				// phone_2_type: "M",
+				// phone_2: "555-555-5555",
+				// email: "mcongrove@cap.gov",
+			};
+
+			$(document).ready(function () {
+				updateOutput();
+
+				$("#grade_type").change(function () {
+					grade_type = $(this).val();
+
+					// Gate the grades based on SM or Cadet
+					if (grade_type === "Senior") {
+						$('option[data-cadet="true"]').attr(
+							"disabled",
+							"disabled"
+						);
+						$('option[data-senior="true"]').removeAttr("disabled");
+					} else {
+						$('option[data-senior="true"]').attr(
+							"disabled",
+							"disabled"
+						);
+						$('option[data-cadet="true"]').removeAttr("disabled");
+					}
+
+					updateInput();
+				});
+
+				$("#form").submit(function (e) {
+					e.preventDefault();
+					updateInput();
+				});
+			});
+
+			function updateInput() {
+				vals["grade"] = $("#grade").val();
+				if ($("#name").val()) {
+					vals["name"] = $("#name").val();
+				} else {
+					vals["name"] = "Jane Doe";
+				}
+				vals["title"] = $("#title").val();
+				vals["unit"] = $("#unit").val();
+				vals["address"] = $("#address").val();
+				vals["phone_1_type"] = $("#phone_1_type").val();
+				vals["phone_1"] = $("#phone_1").val();
+				vals["phone_2_type"] = $("#phone_2_type").val();
+				vals["phone_2"] = $("#phone_2").val();
+				vals["email"] = $("#email").val();
+
+				updateOutput();
+			}
+
+			function updateOutput() {
+				modifyPdf();
+			}
+		</script>
+	</head>
+	<body>
+		<div class="left">
+			<h1>Civil Air Patrol Business Card Generator</h1>
+			<p>
+				Fill out your details below, verify the preview in the right
+				column is correct, and then download or print the PDF.
+			</p>
+			<form id="form">
+				<div>
+					<label for="grade">Grade & Name<span>*</span></label>
+					<div class="dual">
+						<select id="grade_type">
+							<option value="Senior" selected>Senior</option>
+							<option value="Cadet">Cadet</option>
+						</select>
+
+						<select id="grade">
+							<option value="Airman" data-cadet="true" disabled>
+								AB
+							</option>
+							<option value="Airman" data-cadet="true" disabled>
+								Amn
+							</option>
+							<option
+								value="Airman 1st Class"
+								data-cadet="true"
+								disabled
+							>
+								A1C
+							</option>
+							<option
+								value="Senior Airman"
+								data-cadet="true"
+								disabled
+							>
+								SrA
+							</option>
+							<option value="Staff Sgt.">SSgt</option>
+							<option value="Tech. Sgt.">TSgt</option>
+							<option value="Master Sgt.">MSgt</option>
+							<option value="Senior Master Sgt.">SMSgt</option>
+							<option value="Chief Master Sgt.">CMSgt</option>
+							<option value="Senior Member" data-senior="true">
+								SM
+							</option>
+							<option value="Flight Officer" data-senior="true">
+								FO
+							</option>
+							<option
+								value="Tech. Flight Officer"
+								data-senior="true"
+							>
+								TFO
+							</option>
+							<option
+								value="Senior Flight Officer"
+								data-senior="true"
+							>
+								SFO
+							</option>
+							<option value="2nd Lt." selected>2d Lt</option>
+							<option value="1st Lt.">1st Lt</option>
+							<option value="Capt.">Capt</option>
+							<option value="Maj.">Maj</option>
+							<option value="Lt. Col.">Lt Col</option>
+							<option value="Col.">Col</option>
+							<option value="Brig. Gen." data-senior="true">
+								Brig Gen
+							</option>
+							<option value="Maj. Gen." data-senior="true">
+								Maj Gen
+							</option>
+						</select>
+						<input type="text" id="name" placeholder="Jane Doe" />
+					</div>
+				</div>
+				<div id="f_title">
+					<label for="title">Duty Position</label>
+					<input
+						type="text"
+						id="title"
+						placeholder="Operations Officer"
+					/>
+				</div>
+				<div id="f_unit">
+					<label for="unit">Unit</label>
+					<input
+						type="text"
+						id="unit"
+						placeholder="Apollo Comp. Sq."
+					/>
+				</div>
+				<div id="f_address">
+					<label for="address">Address</label>
+					<textarea
+						type="text"
+						id="address"
+						placeholder="123 Flight Line Road
+Building C
+Somewhere, TX 12345"
+					></textarea>
+				</div>
+				<div id="f_phone">
+					<label for="phone_1">Phone Number(s)</label>
+					<div class="dual">
+						<select id="phone_1_type">
+							<option value="M" selected>Mobile</option>
+							<option value="H">Home</option>
+							<option value="O">Office</option>
+						</select>
+
+						<input
+							type="text"
+							id="phone_1"
+							placeholder="555-555-5555"
+						/>
+					</div>
+
+					<div class="dual">
+						<select id="phone_2_type">
+							<option value="M" selected>Mobile</option>
+							<option value="H">Home</option>
+							<option value="O">Office</option>
+						</select>
+
+						<input
+							type="text"
+							id="phone_2"
+							placeholder="555-555-5555"
+						/>
+					</div>
+				</div>
+				<div id="f_email">
+					<label for="email">Email Address</label>
+					<input type="text" id="email" placeholder="jdoe@cap.gov" />
+				</div>
+				<button type="submit">Save Changes</button>
+			</form>
+		</div>
+
+		<div class="right">
+			<iframe id="pdf" style="width: 100%; height: 100%"></iframe>
+		</div>
+	</body>
+</html>
