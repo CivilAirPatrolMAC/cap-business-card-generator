@@ -192,6 +192,12 @@
 					sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
 					"Segoe UI Symbol";
 			}
+			input.error,
+			select.error,
+			textarea.error {
+				border-color: rgb(186, 12, 47);
+				background-color: rgba(186, 12, 47, 0.05);
+			}
 			form {
 				margin: 25px 0 0;
 				border-top: 1px solid #f3f4f6;
@@ -342,6 +348,8 @@
 
 			function placeText(page, x, y) {
 				const maxWidth = 105;
+
+				// GRADE / NAME
 				let gradeNameIsMultiline = false;
 				let gradeNameText = "";
 				let gradeText = (
@@ -362,8 +370,21 @@
 
 				if (gradeNameTextWidth > maxWidth) {
 					gradeNameText = gradeText + "\n" + nameText;
-
 					gradeNameIsMultiline = true;
+
+					const gradeTextWidth = fontBold.widthOfTextAtSize(
+						gradeText,
+						8
+					);
+
+					const nameTextWidth = fontBold.widthOfTextAtSize(
+						nameText,
+						8
+					);
+
+					if (gradeTextWidth > maxWidth || nameTextWidth > maxWidth) {
+						$("#name").addClass("error");
+					}
 				}
 
 				page.drawText(gradeNameText, {
@@ -375,7 +396,22 @@
 					color: PDFLib.rgb(0, 0, 0),
 				});
 
+				// TITLE / UNIT;
 				if (vals.title || vals.unit) {
+					const titleTextWidth = font.widthOfTextAtSize(
+						vals.title,
+						8
+					);
+					const unitTextWidth = font.widthOfTextAtSize(vals.unit, 7);
+
+					if (titleTextWidth > maxWidth) {
+						$("#title").addClass("error");
+					}
+
+					if (unitTextWidth > maxWidth) {
+						$("#unit").addClass("error");
+					}
+
 					page.drawText(
 						vals.title +
 							(vals.title && vals.unit ? "\n" : "") +
@@ -392,6 +428,21 @@
 				}
 
 				if (vals.address) {
+					let addressTextParts = vals.address.split("\n");
+					let addressTextWidth = 0;
+
+					addressTextParts.forEach((part) => {
+						const w = font.widthOfTextAtSize(part, 7);
+
+						if (w > addressTextWidth) {
+							addressTextWidth = w;
+						}
+					});
+
+					if (addressTextWidth > maxWidth) {
+						$("#address").addClass("error");
+					}
+
 					page.drawText(vals.address, {
 						x: x,
 						y: y - (gradeNameIsMultiline ? 44.5 : 38.5),
@@ -404,6 +455,13 @@
 
 				if (vals.phone_1 || vals.phone_2 || vals.email) {
 					const contactText = [];
+					const emailTextWidth = vals.email
+						? font.widthOfTextAtSize(vals.email, 7)
+						: 0;
+
+					if (emailTextWidth > maxWidth) {
+						$("#email").addClass("error");
+					}
 
 					if (vals.phone_1) {
 						contactText.push(
@@ -509,6 +567,12 @@
 				vals["phone_2_type"] = $("#phone_2_type").val();
 				vals["phone_2"] = $("#phone_2").val();
 				vals["email"] = $("#email").val();
+
+				$("#name").removeClass("error");
+				$("#title").removeClass("error");
+				$("#unit").removeClass("error");
+				$("#address").removeClass("error");
+				$("#email").removeClass("error");
 
 				updateOutput();
 			}
