@@ -176,6 +176,10 @@
 			p {
 				margin: 5px 0;
 			}
+			p.note {
+				color: rgb(158, 162, 162);
+				margin: 10px 0 25px;
+			}
 			input,
 			select,
 			textarea {
@@ -200,6 +204,7 @@
 			}
 			form {
 				margin: 25px 0 0;
+				padding: 25px 0 0;
 				border-top: 1px solid #f3f4f6;
 			}
 			label {
@@ -314,33 +319,33 @@
 				);
 
 				const pages = pdfDoc.getPages();
-				const page = pages[0];
+				const pageFront = pages[0];
 				let rowY = 728;
 				const shiftY = 144.1;
 				const colX = 185.2;
 
-				placeText(page, colX, rowY);
-				placeText(page, colX + 252, rowY);
+				placeText(pageFront, colX, rowY);
+				placeText(pageFront, colX + 252, rowY);
 
 				rowY -= shiftY;
 
-				placeText(page, colX, rowY);
-				placeText(page, colX + 252, rowY);
+				placeText(pageFront, colX, rowY);
+				placeText(pageFront, colX + 252, rowY);
 
 				rowY -= shiftY;
 
-				placeText(page, colX, rowY);
-				placeText(page, colX + 252, rowY);
+				placeText(pageFront, colX, rowY);
+				placeText(pageFront, colX + 252, rowY);
 
 				rowY -= shiftY;
 
-				placeText(page, colX, rowY);
-				placeText(page, colX + 252, rowY);
+				placeText(pageFront, colX, rowY);
+				placeText(pageFront, colX + 252, rowY);
 
 				rowY -= shiftY;
 
-				placeText(page, colX, rowY);
-				placeText(page, colX + 252, rowY);
+				placeText(pageFront, colX, rowY);
+				placeText(pageFront, colX + 252, rowY);
 
 				const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
 
@@ -613,6 +618,12 @@
 			<p>
 				Fill out your details below, verify the preview in the right
 				column is correct, and then download or print the PDF.
+			</p>
+			<p class="note">
+				Compatible with Avery templates 18871, 27871, 27881, 27883,
+				28371, 28877, 28878, 38871, 38873, 38876, 5371, 5376, 5377,
+				55871, 55876, 5870, 5871, 5874, 5876, 5877, 5911, 8371, 8376,
+				8377, 8471, 8870, 8871, 8873, 8875, 8876, 8877.
 			</p>
 			<form id="form">
 				<div>
