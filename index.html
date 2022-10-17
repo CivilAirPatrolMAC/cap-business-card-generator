@@ -368,14 +368,14 @@
 				}
 
 				let nameText = vals.name.toUpperCase();
-				gradeNameText = gradeText + " " + nameText;
+				gradeNameText = (gradeText && gradeText + " ") + nameText;
 				let gradeNameTextWidth = fontBold.widthOfTextAtSize(
 					gradeNameText,
 					8
 				);
 
 				if (gradeNameTextWidth > maxWidth) {
-					gradeNameText = gradeText + "\n" + nameText;
+					gradeNameText = (gradeText && gradeText + "\n") + nameText;
 					gradeNameIsMultiline = true;
 
 					const gradeTextWidth = fontBold.widthOfTextAtSize(
@@ -660,9 +660,7 @@
 							<option value="Master Sgt.">MSgt</option>
 							<option value="Senior Master Sgt.">SMSgt</option>
 							<option value="Chief Master Sgt.">CMSgt</option>
-							<option value="Senior Member" data-senior="true">
-								SM
-							</option>
+							<option value="" data-senior="true">SM</option>
 							<option value="Flight Officer" data-senior="true">
 								FO
 							</option>
@@ -758,7 +756,7 @@ Somewhere, TX 12345"
 			</form>
 
 			<footer>
-				Version 1. Last modified on October 9, 2022. Created by
+				Version 2. Last modified on October 17, 2022. Created by
 				<a href="mailto:mcongrove@cap.gov">Lt Col Matthew Congrove</a>.
 			</footer>
 		</div>
