@@ -99,7 +99,7 @@
 				padding: 0;
 				border: 0;
 				font-size: 100%;
-				font: inherit;
+				font-family: inherit;
 				vertical-align: baseline;
 			}
 			/* HTML5 display-role reset for older browsers */
@@ -320,9 +320,9 @@
 
 				const pages = pdfDoc.getPages();
 				const pageFront = pages[0];
-				let rowY = 728;
-				const shiftY = 144.1;
-				const colX = 185.2;
+				let rowY = 735.6;
+				const shiftY = 143.9;
+				const colX = 173;
 
 				placeText(pageFront, colX, rowY);
 				placeText(pageFront, colX + 252, rowY);
@@ -353,21 +353,21 @@
 			}
 
 			function placeText(page, x, y) {
-				const maxWidth = 105;
+				const maxWidth = 121;
 
 				// GRADE / NAME
 				let gradeNameIsMultiline = false;
 				let gradeNameText = "";
 				let gradeText = (
 					(grade_type === "Cadet" ? "Cadet " : "") + vals.grade
-				).toUpperCase();
+				);
 				const gradeTextWidth = fontBold.widthOfTextAtSize(gradeText, 8);
 
 				if (gradeTextWidth > maxWidth && grade_type === "Cadet") {
-					gradeText = "C/" + vals.grade.toUpperCase();
+					gradeText = "C/" + vals.grade;
 				}
 
-				let nameText = vals.name.toUpperCase();
+				let nameText = vals.name;
 				gradeNameText = (gradeText && gradeText + " ") + nameText;
 				let gradeNameTextWidth = fontBold.widthOfTextAtSize(
 					gradeNameText,
@@ -400,7 +400,7 @@
 					size: 8,
 					lineHeight: 9,
 					font: fontBold,
-					color: PDFLib.rgb(0, 0, 0),
+					color: PDFLib.rgb(0, 0.09411764706, 0.4431372549),
 				});
 
 				// TITLE / UNIT;
@@ -455,7 +455,7 @@
 
 					page.drawText(vals.address, {
 						x: x,
-						y: y - (gradeNameIsMultiline ? 44.5 : 38.5),
+						y: y - (gradeNameIsMultiline ? 52.5 : 46.5),
 						size: 7,
 						lineHeight: 8,
 						font: font,
@@ -498,7 +498,7 @@
 
 					page.drawText(contactText.join("\n"), {
 						x: x,
-						y: y - 79.5,
+						y: y - 95,
 						size: 7,
 						lineHeight: 8,
 						font: font,
@@ -511,8 +511,6 @@
 
 			function placeError(page) {
 				if (isError) {
-					const { width, height } = page.getSize();
-
 					page.drawText("TEXT IS TOO LONG", {
 						x: 140,
 						y: 700,
@@ -762,13 +760,13 @@ Somewhere, TX 12345"
 			</form>
 
 			<footer>
-				Version 3. Last modified on October 20, 2022. Created by
+				Version 4. Last modified on October 6, 2023. Created by
 				<a href="mailto:mcongrove@cap.gov">Lt Col Matthew Congrove</a>.
 			</footer>
 		</div>
 
 		<div class="right">
-			<iframe id="pdf" style="width: 100%; height: 100%"></iframe>
+			<iframe id="pdf" style="width: 100%; height: 100%" title="Preview"></iframe>
 		</div>
 	</body>
 </html>
