@@ -37,8 +37,7 @@ html {
 
 body {
 	margin: 0;
-	font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-		sans-serif;
+	font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 	color: var(--text);
 	background:
 		radial-gradient(circle at top, rgba(15, 76, 129, 0.08), transparent 30%),
@@ -70,15 +69,11 @@ button {
 	cursor: pointer;
 }
 
-/* App shell */
-
 .app-shell {
 	width: min(var(--max-width), calc(100% - 2rem));
 	margin: 0 auto;
 	padding: 2rem 0 3rem;
 }
-
-/* Header */
 
 .page-header {
 	margin-bottom: 1.5rem;
@@ -121,15 +116,12 @@ button {
 	line-height: 1.65;
 }
 
-/* Tool switcher */
-
 .tool-switcher {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.75rem;
 }
 
-.tool-switcher button,
 .tool-switcher__link {
 	appearance: none;
 	display: inline-flex;
@@ -148,38 +140,18 @@ button {
 	text-decoration: none;
 }
 
-.tool-switcher button:hover,
 .tool-switcher__link:hover {
 	background: rgba(255, 255, 255, 0.16);
 	transform: translateY(-1px);
 	text-decoration: none;
 }
 
-.tool-switcher button.active,
-.tool-switcher__link.active,
 .tool-switcher__link--current {
 	background: #fff;
 	color: var(--brand-dark);
 	border-color: #fff;
+	cursor: default;
 }
-
-.tool-switcher button:disabled,
-.tool-switcher button.disabled,
-.tool-switcher__link.disabled {
-	background: rgba(255, 255, 255, 0.08);
-	color: rgba(255, 255, 255, 0.6);
-	border-color: rgba(255, 255, 255, 0.2);
-	cursor: not-allowed;
-	opacity: 0.7;
-}
-
-.tool-switcher button:disabled:hover,
-.tool-switcher__link.disabled:hover {
-	transform: none;
-	background: rgba(255, 255, 255, 0.08);
-}
-
-/* Layout */
 
 .layout {
 	display: grid;
@@ -202,8 +174,6 @@ button {
 	position: sticky;
 	top: 1rem;
 }
-
-/* Cards */
 
 .card {
 	background: var(--surface);
@@ -237,24 +207,18 @@ button {
 }
 
 .section-heading h2,
-.preview-card h2,
-.tool-card h3,
-.landing-info__section h3 {
+.preview-card h2 {
 	margin: 0;
 	line-height: 1.2;
 }
 
 .section-heading p,
 .preview-card__title p,
-.page-footer,
-.tool-card p,
-.landing-info__section p {
+.page-footer {
 	margin: 0;
 	color: var(--text-soft);
 	line-height: 1.65;
 }
-
-/* Guidance / callout */
 
 .callout {
 	margin-top: 1rem;
@@ -273,61 +237,23 @@ button {
 	font-size: 1rem;
 }
 
-.callout ul,
+.callout p {
+	margin: 0.4rem 0 0;
+	line-height: 1.65;
+}
+
 .guidance-list {
 	margin: 0;
 	padding-left: 1.15rem;
 	line-height: 1.7;
 }
 
-.guidance-list li + li,
-.callout li + li {
+.guidance-list li + li {
 	margin-top: 0.3rem;
 }
 
-/* Tool grid */
-
-.tool-grid {
-	display: grid;
-	gap: 1rem;
-}
-
-.tool-card {
-	display: grid;
-	gap: 1rem;
-	padding: 1.1rem;
-	border: 1px solid var(--border);
-	border-radius: 14px;
-	background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
-	transition:
-		transform var(--transition),
-		box-shadow var(--transition),
-		border-color var(--transition);
-}
-
-.tool-card:hover {
-	transform: translateY(-2px);
-	box-shadow: var(--shadow-sm);
-	border-color: var(--border-strong);
-}
-
-.tool-card__content {
-	display: grid;
-	gap: 0.5rem;
-}
-
-.tool-card__actions {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.75rem;
-}
-
-/* Buttons */
-
-.button,
-button.button,
-.form-actions button,
-.primary-action {
+.button--primary,
+.form-actions button {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -341,19 +267,6 @@ button.button,
 		box-shadow 0.15s ease,
 		background 0.15s ease,
 		border-color 0.15s ease;
-}
-
-.button:hover,
-button.button:hover,
-.form-actions button:hover,
-.primary-action:hover {
-	transform: translateY(-1px);
-	text-decoration: none;
-}
-
-.button--primary,
-.form-actions button,
-.primary-action {
 	background: var(--brand);
 	color: #fff;
 	border-color: var(--brand);
@@ -361,27 +274,11 @@ button.button:hover,
 }
 
 .button--primary:hover,
-.form-actions button:hover,
-.primary-action:hover {
+.form-actions button:hover {
+	transform: translateY(-1px);
 	background: var(--brand-dark);
 	border-color: var(--brand-dark);
-}
-
-.button--secondary {
-	background: #fff;
-	color: var(--brand);
-	border-color: var(--border);
-}
-
-.button--secondary:hover {
-	border-color: var(--border-strong);
-	background: var(--surface-alt);
-}
-
-/* Form elements */
-
-.generator-form {
-	display: block;
+	text-decoration: none;
 }
 
 .generator-form label,
@@ -443,6 +340,10 @@ textarea.error {
 	background-color: var(--danger-bg);
 }
 
+select option:disabled {
+	color: #9aa5b1;
+}
+
 textarea {
 	min-height: 96px;
 	resize: vertical;
@@ -455,18 +356,11 @@ textarea {
 	margin-bottom: 0.75rem;
 }
 
-.triple,
 .grade-name-row {
 	display: grid;
-	grid-template-columns: 140px minmax(170px, 1fr) minmax(220px, 1.2fr);
+	grid-template-columns: 170px minmax(180px, 1fr) minmax(220px, 1.2fr);
 	gap: 0.75rem;
 }
-
-.form-actions {
-	padding-top: 0.25rem;
-}
-
-/* Preview */
 
 .preview-card {
 	overflow: hidden;
@@ -485,15 +379,7 @@ textarea {
 	gap: 0.35rem;
 }
 
-.preview-surface {
-	padding: 1rem;
-	border: 1px solid var(--border);
-	border-radius: 14px;
-	background: linear-gradient(180deg, #fbfdff 0%, #f5f8fb 100%);
-}
-
-.preview-frame,
-.pdf-frame {
+.preview-frame {
 	padding: 0.75rem;
 	border: 1px solid var(--border);
 	border-radius: 14px;
@@ -501,8 +387,6 @@ textarea {
 }
 
 .preview-frame iframe,
-.pdf-frame iframe,
-#pdf.preview-frame__iframe,
 #pdf {
 	width: 100%;
 	height: 72vh;
@@ -512,22 +396,6 @@ textarea {
 	background: #fff;
 	display: block;
 }
-
-.landing-info {
-	display: grid;
-	gap: 1rem;
-}
-
-.landing-info__section {
-	display: grid;
-	gap: 0.45rem;
-	padding: 1rem;
-	border: 1px solid var(--border);
-	border-radius: 12px;
-	background: #fff;
-}
-
-/* Footer */
 
 .page-footer {
 	padding: 0.1rem 0.2rem 0;
@@ -539,28 +407,9 @@ textarea {
 	text-decoration: underline;
 }
 
-/* Utility */
-
-.muted,
-.text-muted {
+.muted {
 	color: var(--text-soft);
 }
-
-.faint {
-	color: var(--text-faint);
-}
-
-.stack-sm {
-	display: grid;
-	gap: 0.5rem;
-}
-
-.stack-md {
-	display: grid;
-	gap: 1rem;
-}
-
-/* Responsive */
 
 @media (max-width: 1120px) {
 	.layout {
@@ -572,8 +421,6 @@ textarea {
 	}
 
 	.preview-frame iframe,
-	.pdf-frame iframe,
-	#pdf.preview-frame__iframe,
 	#pdf {
 		height: 70vh;
 		min-height: 560px;
@@ -581,7 +428,6 @@ textarea {
 }
 
 @media (max-width: 840px) {
-	.triple,
 	.grade-name-row {
 		grid-template-columns: 1fr;
 	}
@@ -611,7 +457,6 @@ textarea {
 		flex-direction: column;
 	}
 
-	.tool-switcher button,
 	.tool-switcher__link {
 		width: 100%;
 	}
@@ -621,8 +466,6 @@ textarea {
 	}
 
 	.preview-frame iframe,
-	.pdf-frame iframe,
-	#pdf.preview-frame__iframe,
 	#pdf {
 		height: 62vh;
 		min-height: 420px;
