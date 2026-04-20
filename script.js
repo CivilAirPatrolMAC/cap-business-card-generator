@@ -137,11 +137,11 @@ function getValidationWarnings() {
 		warnings.push('"SM" is not a valid CAP grade.');
 	}
 
-	// Detect post-nominals at end of name (with or without comma)
-	const postNominalPattern = /(?:,|\s)\s*(MD|DO|PhD|EdD|DBA|DNP|PharmD|DDS|DMD|OD|JD|LLM|MA|MS|MBA|MPA|MEd|BA|BS|BBA|RN|NP|PA-C|CPA|CFA|PMP|CISSP|PE|CFI|CFII|ATP|A&P|Esq\.?)$/i;
+	const postNominalPattern =
+		/(?:,|\s)\s*(MD|DO|PhD|EdD|DBA|DNP|PharmD|DDS|DMD|OD|JD|LLM|MA|MS|MBA|MPA|MEd|BA|BS|BBA|RN|NP|PA-C|CPA|CFA|PMP|CISSP|PE|CFI|CFII|ATP|A&P|Esq\.?)$/i;
 
 	if (postNominalPattern.test(nameValue)) {
-	warnings.push(`Do not include post-nominals in the name field. Invalid entry: "${nameValue}"`);
+		warnings.push(`Do not include post-nominals in the name field. Invalid entry: "${nameValue}"`);
 	}
 
 	if (grade_type === "Adult" && /\bCadet\b/i.test(combinedName)) {
@@ -157,7 +157,7 @@ function getValidationWarnings() {
 	}
 
 	if (titleValue && /,\s*CAP\b/i.test(titleValue)) {
-		warnings.push('Do not append ", CAP" to the text.');
+		warnings.push('Do not append ", CAP" to duty position text.');
 	}
 
 	if (unitValue && /,\s*CAP\b/i.test(unitValue)) {
@@ -169,11 +169,11 @@ function getValidationWarnings() {
 	}
 
 	if (emailValue && !isValidCapEmail(emailValue)) {
-		warnings.push("Email must point to @xxwg.cap.gov, @xxwg.cap.us, @cap.gov, or @cap.us.");
+		warnings.push("Email must end in @cap.gov or @cap.us.");
 	}
 
 	if (titleValue && titleValue.length > 40) {
-		warnings.push('Duty position may be too long for the layout. Invalid entry: "' + titleValue + '"');
+		warnings.push(`Duty position may be too long for the layout. Invalid entry: "${titleValue}"`);
 	}
 
 	return warnings;
@@ -193,6 +193,7 @@ function setActionLockState(isLocked) {
 	}
 
 	if (preview) {
+		preview.style.display = isLocked ? "none" : "block";
 		preview.classList.toggle("preview-disabled", isLocked);
 	}
 
@@ -412,11 +413,7 @@ function updateInput() {
 	const warnings = hasInteracted ? getValidationWarnings() : [];
 	renderValidationWarnings(warnings);
 
-	const hasBlockingErrors = hasInteracted && (
-		!vals.name ||
-		(vals.email && !isValidCapEmail(vals.email))
-	);
-
+	const hasBlockingErrors = hasInteracted && warnings.length > 0;
 	setActionLockState(hasBlockingErrors);
 
 	if (!isValidCapEmail(vals.email) && hasInteracted) {
@@ -424,14 +421,20 @@ function updateInput() {
 		isError = true;
 	}
 
-	generatePdf();
+	if (!hasBlockingErrors) {
+		generatePdf();
+	} else {
+		const preview = document.getElementById("pdf");
+		if (preview) {
+			preview.src = "";
+		}
+	}
 }
 
 $(document).ready(function () {
 	grade_type = $("#grade_type").val();
 	gateGrades();
 
-	// Force clean initial state
 	renderValidationWarnings([]);
 	setActionLockState(false);
 
@@ -470,7 +473,6 @@ $(document).ready(function () {
 			updateInput();
 		});
 
-	// Preview only on load, no validation state
 	generatePdf();
 
 	$("#form").on("submit", function (e) {
