@@ -266,7 +266,7 @@ function placeText(page, x, y) {
 	placeError(page);
 }
 
-function placeError(page) {
+/*function placeError(page) {
 	if (isError) {
 		page.drawText("TEXT IS TOO LONG", {
 			x: 140,
@@ -278,7 +278,7 @@ function placeError(page) {
 		});
 	}
 }
-
+*/
 function updateInput() {
 	autoFormatPhoneInput(document.getElementById("phone_1"));
 	autoFormatPhoneInput(document.getElementById("phone_2"));
