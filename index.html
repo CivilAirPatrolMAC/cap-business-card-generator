@@ -57,16 +57,16 @@
 					<div class="section-heading">
 						<h2>Business Card Guidance</h2>
 						<p>
-							This tool allows Civil Air Patrol members to generate compliant
-							business cards using approved branding elements, grade conventions,
-							and contact information.
+							This tool allows Civil Air Patrol members and NHQ staff to generate compliant
+							business cards using approved branding elements, grade conventions, and
+							contact information.
 						</p>
 					</div>
 
 					<div class="callout callout--warning">
 						<h3>Before you generate</h3>
 						<ul class="guidance-list">
-							<li>Use approved CAP grade abbreviations and official naming conventions.</li>
+							<li>Use approved CAP grade abbreviations, courtesy titles, and official naming conventions.</li>
 							<li>Include only duty positions, unit names, and contact information appropriate to your role.</li>
 							<li>Keep titles, unit names, and address lines concise so the layout remains readable.</li>
 							<li>Review spacing, alignment, and legibility before printing or distributing.</li>
@@ -104,9 +104,20 @@
 								<select id="grade_type" aria-label="Member type">
 									<option value="Adult" selected>Adult Volunteer</option>
 									<option value="Cadet">Cadet</option>
+									<option value="NHQ">NHQ Staff</option>
 								</select>
 
 								<select id="grade" aria-label="Grade">
+									<optgroup label="No Grade">
+										<option value="" data-nhq="true" data-adult="true" selected>No grade</option>
+									</optgroup>
+
+									<optgroup label="Courtesy Titles">
+										<option value="Mr." data-nhq="true">Mr.</option>
+										<option value="Ms." data-nhq="true">Ms.</option>
+										<option value="Mrs." data-nhq="true">Mrs.</option>
+									</optgroup>
+
 									<optgroup label="Cadet Enlisted">
 										<option value="Airman Basic" data-cadet="true">Airman Basic</option>
 										<option value="Airman" data-cadet="true">Airman</option>
@@ -131,12 +142,12 @@
 										<option value="Col." data-cadet="true">Col.</option>
 									</optgroup>
 
-									<optgroup label="Adult">
-										<option value="" data-adult="true">Senior Member</option>
+									<optgroup label="Adult Volunteer">
+										<option value="Senior Member" data-adult="true">Senior Member</option>
 										<option value="Flight Officer" data-adult="true">Flight Officer</option>
 										<option value="Tech. Flight Officer" data-adult="true">Tech. Flight Officer</option>
 										<option value="Senior Flight Officer" data-adult="true">Senior Flight Officer</option>
-										<option value="2nd Lt." data-adult="true" selected>2nd Lt.</option>
+										<option value="2nd Lt." data-adult="true">2nd Lt.</option>
 										<option value="1st Lt." data-adult="true">1st Lt.</option>
 										<option value="Capt." data-adult="true">Capt.</option>
 										<option value="Maj." data-adult="true">Maj.</option>
