@@ -2,6 +2,7 @@ let font;
 let fontBold;
 let isError = false;
 let grade_type = "Adult";
+let hasInteracted = false;
 
 const vals = {
 	grade: "",
@@ -404,9 +405,19 @@ function updateInput() {
 
 	isError = false;
 
-	const warnings = getValidationWarnings();
-	renderValidationWarnings(warnings);
-	setActionLockState(warnings.length > 0);
+	if (hasInteracted) {
+		const warnings = getValidationWarnings();
+		renderValidationWarnings(warnings);
+
+		const hasBlockingErrors =
+			!vals.name ||
+			(vals.email && !isValidCapEmail(vals.email));
+
+		setActionLockState(hasBlockingErrors);
+	} else {
+		renderValidationWarnings([]);
+		setActionLockState(false);
+	}
 
 	if (!isValidCapEmail(vals.email)) {
 		$("#email").addClass("error");
@@ -421,16 +432,20 @@ $(document).ready(function () {
 	gateGrades();
 
 	$("#phone_1, #phone_2").on("input", function () {
+		hasInteracted = true;
 		autoFormatPhoneInput(this);
 		updateInput();
 	});
 
 	$("#phone_1, #phone_2").on("blur", function () {
+		hasInteracted = true;
 		autoFormatPhoneInput(this);
 		updateInput();
 	});
 
 	$("#email").on("input blur change", function () {
+		hasInteracted = true;
+
 		const value = $(this).val().trim();
 
 		if (value === "" || isValidCapEmail(value)) {
@@ -443,20 +458,28 @@ $(document).ready(function () {
 	});
 
 	$("#grade_type").on("change", function () {
+		hasInteracted = true;
 		grade_type = $(this).val();
 		gateGrades();
 		updateInput();
 	});
 
-	$("#grade").on("change", updateInput);
+	$("#grade").on("change", function () {
+		hasInteracted = true;
+		updateInput();
+	});
 
 	$("#name, #title, #unit, #address, #phone_1_type, #phone_2_type")
-		.on("input change blur", updateInput);
+		.on("input change blur", function () {
+			hasInteracted = true;
+			updateInput();
+		});
 
-	updateInput();
+	generatePdf();
 
 	$("#form").on("submit", function (e) {
 		e.preventDefault();
+		hasInteracted = true;
 		updateInput();
 	});
 });
