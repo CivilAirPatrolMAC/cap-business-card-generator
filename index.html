@@ -21,7 +21,6 @@
 	<script src="https://unpkg.com/pdf-lib"></script>
 	<script src="script.js" defer></script>
 </head>
-
 <body>
 	<div class="app-shell">
 		<header class="page-header">
@@ -45,7 +44,7 @@
 					<a class="tool-switcher__link" href="https://cap-signature-generator.netlify.app/">
 						Email Signature Block Generator
 					</a>
-					<span class="tool-switcher__link tool-switcher__link--current">
+					<span class="tool-switcher__link tool-switcher__link--current" aria-current="page">
 						Business Card Generator
 					</span>
 				</nav>
@@ -54,8 +53,6 @@
 
 		<main class="layout">
 			<section class="controls-column">
-
-				<!-- GUIDANCE CARD -->
 				<article class="card guidance-card">
 					<div class="section-heading">
 						<h2>Business Card Guidance</h2>
@@ -75,24 +72,23 @@
 							<li>Review spacing, alignment, and legibility before printing or distributing.</li>
 						</ul>
 					</div>
+
 					<div class="callout">
 						<h3>Supported Avery Templates</h3>
-					<p class="muted">
-						This layout is compatible with the following Avery® business card templates:
-					</p>
-					<p class="muted">
-						18871, 27871, 27881, 27883, 28371, 28877, 28878, 38871, 38873,
-						38876, 5371, 5376, 5377, 55871, 55876, 5870, 5871, 5874, 5876,
-						5877, 5911, 8371, 8376, 8377, 8471, 8870, 8871, 8873, 8875,
-						8876, 8877.
-					</p>
-	</div>
+						<p class="muted">
+							This layout is compatible with the following Avery® business card templates:
+						</p>
+						<p class="muted">
+							18871, 27871, 27881, 27883, 28371, 28877, 28878, 38871, 38873,
+							38876, 5371, 5376, 5377, 55871, 55876, 5870, 5871, 5874, 5876,
+							5877, 5911, 8371, 8376, 8377, 8471, 8870, 8871, 8873, 8875,
+							8876, 8877.
+						</p>
+					</div>
 				</article>
 
-				<!-- FORM CARD -->
 				<article class="card form-card">
 					<form id="form" class="generator-form">
-
 						<div class="form-section">
 							<div class="section-heading">
 								<h2>Business Card Details</h2>
@@ -101,37 +97,35 @@
 							<label for="grade">Grade &amp; Name <span>*</span></label>
 
 							<div class="grade-name-row">
-								<select id="grade_type">
-									<option value="Senior" selected>Senior</option>
+								<select id="grade_type" aria-label="Member type">
+									<option value="Adult" selected>Adult Volunteer</option>
 									<option value="Cadet">Cadet</option>
 								</select>
 
-								<select id="grade">
-									<option value="Airman Basic" data-cadet="true" disabled>Airman Basic</option>
-									<option value="Airman" data-cadet="true" disabled>Airman</option>
-									<option value="Airman 1st Class" data-cadet="true" disabled>Airman 1st Class</option>
-									<option value="Senior Airman" data-cadet="true" disabled>Senior Airman</option>
+								<select id="grade" aria-label="Grade">
+									<option value="Airman Basic" data-cadet="true">Airman Basic</option>
+									<option value="Airman" data-cadet="true">Airman</option>
+									<option value="Airman 1st Class" data-cadet="true">Airman 1st Class</option>
+									<option value="Senior Airman" data-cadet="true">Senior Airman</option>
 
-									<option value="Staff Sgt.">Staff Sgt.</option>
-									<option value="Tech. Sgt.">Tech. Sgt.</option>
-									<option value="Master Sgt.">Master Sgt.</option>
-									<option value="Senior Master Sgt.">Senior Master Sgt.</option>
-									<option value="Chief Master Sgt.">Chief Master Sgt.</option>
+									<option value="Staff Sgt." data-any="true">Staff Sgt.</option>
+									<option value="Tech. Sgt." data-any="true">Tech. Sgt.</option>
+									<option value="Master Sgt." data-any="true">Master Sgt.</option>
+									<option value="Senior Master Sgt." data-any="true">Senior Master Sgt.</option>
+									<option value="Chief Master Sgt." data-any="true">Chief Master Sgt.</option>
 
-									<option value="" data-senior="true">Senior Member</option>
-									<option value="Flight Officer" data-senior="true">Flight Officer</option>
-									<option value="Tech. Flight Officer" data-senior="true">Tech. Flight Officer</option>
-									<option value="Senior Flight Officer" data-senior="true">Senior Flight Officer</option>
-
-									<option value="2nd Lt." selected>2nd Lt.</option>
-									<option value="1st Lt.">1st Lt.</option>
-									<option value="Capt.">Capt.</option>
-									<option value="Maj.">Maj.</option>
-									<option value="Lt. Col.">Lt. Col.</option>
-									<option value="Col.">Col.</option>
-
-									<option value="Brig. Gen." data-senior="true">Brig. Gen.</option>
-									<option value="Maj. Gen." data-senior="true">Maj. Gen.</option>
+									<option value="" data-adult="true">Senior Member</option>
+									<option value="Flight Officer" data-adult="true">Flight Officer</option>
+									<option value="Tech. Flight Officer" data-adult="true">Tech. Flight Officer</option>
+									<option value="Senior Flight Officer" data-adult="true">Senior Flight Officer</option>
+									<option value="2nd Lt." data-adult="true" selected>2nd Lt.</option>
+									<option value="1st Lt." data-adult="true">1st Lt.</option>
+									<option value="Capt." data-adult="true">Capt.</option>
+									<option value="Maj." data-adult="true">Maj.</option>
+									<option value="Lt. Col." data-adult="true">Lt. Col.</option>
+									<option value="Col." data-adult="true">Col.</option>
+									<option value="Brig. Gen." data-adult="true">Brig. Gen.</option>
+									<option value="Maj. Gen." data-adult="true">Maj. Gen.</option>
 								</select>
 
 								<input type="text" id="name" placeholder="Jane Doe" />
@@ -150,14 +144,17 @@
 
 						<div class="form-section">
 							<label for="address">Address</label>
-							<textarea id="address" placeholder="123 Flight Line Road&#10;Building C&#10;Somewhere, TX 12345"></textarea>
+							<textarea
+								id="address"
+								placeholder="123 Flight Line Road&#10;Building C&#10;Somewhere, TX 12345"
+							></textarea>
 						</div>
 
 						<div class="form-section">
 							<label>Phone Number(s)</label>
 
 							<div class="dual">
-								<select id="phone_1_type">
+								<select id="phone_1_type" aria-label="Primary phone type">
 									<option value="M" selected>Mobile</option>
 									<option value="H">Home</option>
 									<option value="O">Office</option>
@@ -166,7 +163,7 @@
 							</div>
 
 							<div class="dual">
-								<select id="phone_2_type">
+								<select id="phone_2_type" aria-label="Secondary phone type">
 									<option value="M" selected>Mobile</option>
 									<option value="H">Home</option>
 									<option value="O">Office</option>
@@ -183,12 +180,10 @@
 						<div class="form-section form-actions">
 							<button type="submit" class="button--primary">Update Preview</button>
 						</div>
-
 					</form>
 				</article>
 			</section>
 
-			<!-- PREVIEW -->
 			<aside class="preview-column">
 				<div class="preview-sticky">
 					<article class="card preview-card">
@@ -196,9 +191,8 @@
 							<div class="preview-card__title">
 								<h2>Live Preview</h2>
 								<p class="muted">
-									Review spacing, readability, and compliance before printing. To print, click the printer button next to the download button on the live preview. 
+									Review spacing, readability, and compliance before printing.
 								</p>
-								
 							</div>
 						</div>
 
