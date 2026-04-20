@@ -138,8 +138,8 @@ function getValidationWarnings() {
 	}
 
 	const postNominalPattern =
-		/(?:,|\s)\s*(MD|DO|PhD|EdD|DBA|DNP|PharmD|DDS|DMD|OD|JD|LLM|MA|MS|MBA|MPA|MEd|BA|BS|BBA|RN|NP|PA-C|CPA|CFA|PMP|CISSP|PE|CFI|CFII|ATP|A&P|Esq\.?)$/i;
-
+		/(?:,|\s)\s*(MD|DO|PhD|EdD|DBA|DNP|PharmD|DDS|DMD|OD|JD|LLM|MA|MS|MBA|MPA|MEd|BA|BS|BBA|RN|NP|PA-C|CPA|CFA|PMP|CFM|SHRM-CP|SHRM-SCP|CISSP|PE|CFI|CFII|ATP|A&P|Esq||FACHE|FRCP|EMT-B|EMT-A|EMT-P|EMT-LP|AEM|CEM)\.?)$/i;
+		
 	if (postNominalPattern.test(nameValue)) {
 		warnings.push(`Do not include post-nominals in the name field. Invalid entry: "${nameValue}"`);
 	}
@@ -169,7 +169,7 @@ function getValidationWarnings() {
 	}
 
 	if (emailValue && !isValidCapEmail(emailValue)) {
-		warnings.push("Email must end in @cap.gov or @cap.us.");
+		warnings.push("Email must be an official CAP email domain");
 	}
 
 	if (titleValue && titleValue.length > 40) {
