@@ -147,4 +147,216 @@ function placeText(page, x, y) {
 	const nameText = vals.name;
 	gradeNameText = [gradeText, nameText].filter(Boolean).join(" ");
 
-	const grade
+	const gradeNameTextWidth = fontBold.widthOfTextAtSize(gradeNameText, 8);
+
+	if (gradeNameTextWidth > maxWidth) {
+		gradeNameText = [gradeText, nameText].filter(Boolean).join("\n");
+		gradeNameIsMultiline = true;
+
+		const gradeOnlyWidth = fontBold.widthOfTextAtSize(gradeText || "", 8);
+		const nameOnlyWidth = fontBold.widthOfTextAtSize(nameText, 8);
+
+		if ((gradeText && gradeOnlyWidth > maxWidth) || nameOnlyWidth > maxWidth) {
+			$("#name").addClass("error");
+			isError = true;
+		}
+	}
+
+	page.drawText(gradeNameText, {
+		x: x,
+		y: y,
+		size: 8,
+		lineHeight: 9,
+		font: fontBold,
+		color: PDFLib.rgb(0, 0.09411764706, 0.4431372549),
+	});
+
+	if (vals.title || vals.unit) {
+		const titleTextWidth = font.widthOfTextAtSize(vals.title, 8);
+		const unitTextWidth = font.widthOfTextAtSize(vals.unit, 7);
+
+		if (titleTextWidth > maxWidth) {
+			$("#title").addClass("error");
+			isError = true;
+		}
+
+		if (unitTextWidth > maxWidth) {
+			$("#unit").addClass("error");
+			isError = true;
+		}
+
+		page.drawText(
+			vals.title + (vals.title && vals.unit ? "\n" : "") + vals.unit,
+			{
+				x: x,
+				y: y - (gradeNameIsMultiline ? 18 : 9),
+				size: 7,
+				lineHeight: 8,
+				font: font,
+				color: PDFLib.rgb(0, 0, 0),
+			}
+		);
+	}
+
+	if (vals.address) {
+		const addressTextParts = vals.address.split("\n");
+		let addressTextWidth = 0;
+
+		addressTextParts.forEach((part) => {
+			const w = font.widthOfTextAtSize(part, 7);
+			if (w > addressTextWidth) {
+				addressTextWidth = w;
+			}
+		});
+
+		if (addressTextWidth > maxWidth) {
+			$("#address").addClass("error");
+			isError = true;
+		}
+
+		page.drawText(vals.address, {
+			x: x,
+			y: y - (gradeNameIsMultiline ? 52.5 : 46.5),
+			size: 7,
+			lineHeight: 8,
+			font: font,
+			color: PDFLib.rgb(0, 0, 0),
+		});
+	}
+
+	if (vals.phone_1 || vals.phone_2 || vals.email) {
+		const contactText = [];
+		const emailTextWidth = vals.email
+			? font.widthOfTextAtSize(vals.email, 7)
+			: 0;
+
+		if (emailTextWidth > maxWidth) {
+			$("#email").addClass("error");
+			isError = true;
+		}
+
+		if (vals.phone_1) {
+			contactText.push("(" + vals.phone_1_type + ") " + vals.phone_1);
+		}
+
+		if (vals.phone_2) {
+			contactText.push("(" + vals.phone_2_type + ") " + vals.phone_2);
+		}
+
+		if (vals.email) {
+			contactText.push(vals.email);
+		}
+
+		if (contactText.length === 2) {
+			contactText.unshift("");
+		} else if (contactText.length === 1) {
+			contactText.unshift("", "");
+		}
+
+		page.drawText(contactText.join("\n"), {
+			x: x,
+			y: y - 95,
+			size: 7,
+			lineHeight: 8,
+			font: font,
+			color: PDFLib.rgb(0, 0, 0),
+		});
+	}
+
+	placeError(page);
+}
+
+function placeError(page) {
+	if (isError) {
+		page.drawText("TEXT IS TOO LONG", {
+			x: 140,
+			y: 700,
+			size: 50,
+			font: font,
+			color: PDFLib.rgb(1, 0, 0),
+			rotate: PDFLib.degrees(-45),
+		});
+	}
+}
+
+function updateInput() {
+	autoFormatPhoneInput(document.getElementById("phone_1"));
+	autoFormatPhoneInput(document.getElementById("phone_2"));
+
+	vals.grade = $("#grade").val();
+
+	if ($("#name").val().trim()) {
+		vals.name = $("#name").val().trim();
+	} else {
+		vals.name = "Jane Doe";
+	}
+
+	vals.title = $("#title").val().trim();
+	vals.unit = $("#unit").val().trim();
+	vals.address = $("#address").val().trim();
+	vals.phone_1_type = $("#phone_1_type").val();
+	vals.phone_1 = $("#phone_1").val().trim();
+	vals.phone_2_type = $("#phone_2_type").val();
+	vals.phone_2 = $("#phone_2").val().trim();
+	vals.email = $("#email").val().trim();
+
+	$("#name").removeClass("error");
+	$("#title").removeClass("error");
+	$("#unit").removeClass("error");
+	$("#address").removeClass("error");
+	$("#email").removeClass("error");
+
+	isError = false;
+
+	if (!isValidCapEmail(vals.email)) {
+		$("#email").addClass("error");
+		isError = true;
+	}
+
+	generatePdf();
+}
+
+$(document).ready(function () {
+	grade_type = $("#grade_type").val();
+	gateGrades();
+
+	$("#phone_1, #phone_2").on("input", function () {
+		autoFormatPhoneInput(this);
+		updateInput();
+	});
+
+	$("#phone_1, #phone_2").on("blur", function () {
+		autoFormatPhoneInput(this);
+		updateInput();
+	});
+
+	$("#email").on("input blur change", function () {
+		const value = $(this).val().trim();
+
+		if (value === "" || isValidCapEmail(value)) {
+			$(this).removeClass("error");
+		} else {
+			$(this).addClass("error");
+		}
+
+		updateInput();
+	});
+
+	$("#grade_type").on("change", function () {
+		grade_type = $(this).val();
+		gateGrades();
+		updateInput();
+	});
+
+	$("#grade").on("change", updateInput);
+
+	$("#name, #title, #unit, #address, #phone_1_type, #phone_2_type")
+		.on("input change blur", updateInput);
+
+	updateInput();
+
+	$("#form").on("submit", function (e) {
+		e.preventDefault();
+		updateInput();
+	});
+});
