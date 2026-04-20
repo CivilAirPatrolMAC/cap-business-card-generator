@@ -16,6 +16,33 @@ const vals = {
 	email: "",
 };
 
+function formatPhoneDisplay(value) {
+	let digits = String(value || "").replace(/\D/g, "");
+
+	if (digits.length > 10 && digits.charAt(0) === "1") {
+		digits = digits.slice(1);
+	}
+
+	digits = digits.slice(0, 10);
+
+	if (digits.length <= 3) return digits;
+	if (digits.length <= 6) return digits.slice(0, 3) + "." + digits.slice(3);
+	return digits.slice(0, 3) + "." + digits.slice(3, 6) + "." + digits.slice(6);
+}
+
+function autoFormatPhoneInput(el) {
+	const formatted = formatPhoneDisplay(el.value);
+	if (el.value !== formatted) {
+		el.value = formatted;
+	}
+}
+
+function isValidCapEmail(email) {
+	if (!email) return true;
+	return /^[A-Z0-9._%+-]+@cap\.(gov|us)$/i.test(email);
+}
+
+
 function gateGrades() {
 	const gradeSelect = document.getElementById("grade");
 	const options = Array.from(gradeSelect.querySelectorAll("option"));
@@ -253,6 +280,9 @@ function placeError(page) {
 }
 
 function updateInput() {
+	autoFormatPhoneInput(document.getElementById("phone_1"));
+	autoFormatPhoneInput(document.getElementById("phone_2"));
+
 	vals.grade = $("#grade").val();
 
 	if ($("#name").val().trim()) {
@@ -277,13 +307,40 @@ function updateInput() {
 	$("#email").removeClass("error");
 
 	isError = false;
+
+	if (!isValidCapEmail(vals.email)) {
+		$("#email").addClass("error");
+		isError = true;
+	}
+
 	generatePdf();
 }
 
 $(document).ready(function () {
 	grade_type = $("#grade_type").val();
 	gateGrades();
-	updateInput();
+
+	$("#phone_1, #phone_2").on("input", function () {
+		autoFormatPhoneInput(this);
+		updateInput();
+	});
+
+	$("#phone_1, #phone_2").on("blur", function () {
+		autoFormatPhoneInput(this);
+		updateInput();
+	});
+
+	$("#email").on("input blur change", function () {
+		const value = $(this).val().trim();
+
+		if (value === "" || isValidCapEmail(value)) {
+			$(this).removeClass("error");
+		} else {
+			$(this).addClass("error");
+		}
+
+		updateInput();
+	});
 
 	$("#grade_type").on("change", function () {
 		grade_type = $(this).val();
@@ -293,11 +350,14 @@ $(document).ready(function () {
 
 	$("#grade").on("change", updateInput);
 
-	$("#name, #title, #unit, #address, #phone_1_type, #phone_1, #phone_2_type, #phone_2, #email")
+	$("#name, #title, #unit, #address, #phone_1_type, #phone_2_type")
 		.on("input change blur", updateInput);
+
+	updateInput();
 
 	$("#form").on("submit", function (e) {
 		e.preventDefault();
 		updateInput();
+	});
 	});
 });
