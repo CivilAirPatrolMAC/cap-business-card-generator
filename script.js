@@ -52,6 +52,27 @@ function isValidCapEmail(email) {
 	return /^[A-Z0-9._%+-]+@cap\.(gov|us)$/i.test(email);
 }
 
+function renderValidationWarnings(items) {
+	const box = document.getElementById("validation_warnings");
+	if (!box) return;
+
+	if (!items.length) {
+		box.style.display = "none";
+		box.innerHTML = "";
+		return;
+	}
+
+	let html = '<h3>Brand standards review</h3><ul>';
+
+	for (const item of items) {
+		html += "<li>" + sanitizeText(item) + "</li>";
+	}
+
+	html += "</ul>";
+	box.style.display = "block";
+	box.innerHTML = html;
+}
+
 function gateGrades() {
 	const gradeSelect = document.getElementById("grade");
 	const options = Array.from(gradeSelect.querySelectorAll("option"));
@@ -112,7 +133,7 @@ function getValidationWarnings() {
 	}
 
 	if (/\bSM\b/i.test(combinedName)) {
-		warnings.push('"SM" is not a grade and should not be used.');
+		warnings.push('"SM" is not a valid CAP grade.');
 	}
 
 	if (/\b(MD|DO|PhD|EdD|DBA|DNP|PharmD|DDS|DMD|OD|JD|LLM|MA|MS|MBA|MPA|MEd|BA|BS|BBA|RN|NP|PA-C|CPA|CFA|PMP|CISSP|PE|CFI|CFII|ATP|A&P|Esq\.?)\b/i.test(combinedName)) {
@@ -139,35 +160,19 @@ function getValidationWarnings() {
 		warnings.push('Do not append ", CAP" to the unit name.');
 	}
 
-	if (addressValue.split(/\r?\n/).length > 3) {
-		warnings.push("Address should be limited to three lines for best fit.");
+	if (addressValue && addressValue.split(/\r?\n/).length > 3) {
+		warnings.push("Address should not exceed 3 lines.");
 	}
 
 	if (emailValue && !isValidCapEmail(emailValue)) {
-		warnings.push("Email address must end in @cap.gov or @cap.us.");
+		warnings.push("Email must end in @cap.gov or @cap.us.");
+	}
+
+	if (titleValue && titleValue.length > 40) {
+		warnings.push('Duty position may be too long for the layout. Invalid entry: "' + titleValue + '"');
 	}
 
 	return warnings;
-}
-
-function renderValidationWarnings(items) {
-	const box = document.getElementById("validation_warnings");
-	if (!box) return;
-
-	if (!items.length) {
-		box.style.display = "none";
-		box.innerHTML = "";
-		return;
-	}
-
-	let html = "<h3>Brand standards review</h3><ul>";
-	for (const item of items) {
-		html += "<li>" + sanitizeText(item) + "</li>";
-	}
-	html += "</ul>";
-
-	box.style.display = "block";
-	box.innerHTML = html;
 }
 
 function setActionLockState(isLocked) {
