@@ -91,7 +91,11 @@
 					<form id="form" class="generator-form">
 						<div class="form-section">
 							<div class="section-heading">
-								<h2>Business Card Details</h2>
+								<h2>Grade &amp; Name</h2>
+								<p>
+									Use approved CAP grade abbreviations. Do not use "SM" or add professional
+									post-nominals.
+								</p>
 							</div>
 
 							<label for="grade">Grade &amp; Name <span>*</span></label>
@@ -103,29 +107,44 @@
 								</select>
 
 								<select id="grade" aria-label="Grade">
-									<option value="Airman Basic" data-cadet="true">Airman Basic</option>
-									<option value="Airman" data-cadet="true">Airman</option>
-									<option value="Airman 1st Class" data-cadet="true">Airman 1st Class</option>
-									<option value="Senior Airman" data-cadet="true">Senior Airman</option>
+									<optgroup label="Cadet Enlisted">
+										<option value="Airman Basic" data-cadet="true">Airman Basic</option>
+										<option value="Airman" data-cadet="true">Airman</option>
+										<option value="Airman 1st Class" data-cadet="true">Airman 1st Class</option>
+										<option value="Senior Airman" data-cadet="true">Senior Airman</option>
+									</optgroup>
 
-									<option value="Staff Sgt." data-any="true">Staff Sgt.</option>
-									<option value="Tech. Sgt." data-any="true">Tech. Sgt.</option>
-									<option value="Master Sgt." data-any="true">Master Sgt.</option>
-									<option value="Senior Master Sgt." data-any="true">Senior Master Sgt.</option>
-									<option value="Chief Master Sgt." data-any="true">Chief Master Sgt.</option>
+									<optgroup label="NCO">
+										<option value="Staff Sgt." data-any="true">Staff Sgt.</option>
+										<option value="Tech. Sgt." data-any="true">Tech. Sgt.</option>
+										<option value="Master Sgt." data-any="true">Master Sgt.</option>
+										<option value="Senior Master Sgt." data-any="true">Senior Master Sgt.</option>
+										<option value="Chief Master Sgt." data-any="true">Chief Master Sgt.</option>
+									</optgroup>
 
-									<option value="" data-adult="true">Senior Member</option>
-									<option value="Flight Officer" data-adult="true">Flight Officer</option>
-									<option value="Tech. Flight Officer" data-adult="true">Tech. Flight Officer</option>
-									<option value="Senior Flight Officer" data-adult="true">Senior Flight Officer</option>
-									<option value="2nd Lt." data-adult="true" selected>2nd Lt.</option>
-									<option value="1st Lt." data-adult="true">1st Lt.</option>
-									<option value="Capt." data-adult="true">Capt.</option>
-									<option value="Maj." data-adult="true">Maj.</option>
-									<option value="Lt. Col." data-adult="true">Lt. Col.</option>
-									<option value="Col." data-adult="true">Col.</option>
-									<option value="Brig. Gen." data-adult="true">Brig. Gen.</option>
-									<option value="Maj. Gen." data-adult="true">Maj. Gen.</option>
+									<optgroup label="Cadet Officer">
+										<option value="2nd Lt." data-cadet="true">2nd Lt.</option>
+										<option value="1st Lt." data-cadet="true">1st Lt.</option>
+										<option value="Capt." data-cadet="true">Capt.</option>
+										<option value="Maj." data-cadet="true">Maj.</option>
+										<option value="Lt. Col." data-cadet="true">Lt. Col.</option>
+										<option value="Col." data-cadet="true">Col.</option>
+									</optgroup>
+
+									<optgroup label="Adult">
+										<option value="" data-adult="true">Senior Member</option>
+										<option value="Flight Officer" data-adult="true">Flight Officer</option>
+										<option value="Tech. Flight Officer" data-adult="true">Tech. Flight Officer</option>
+										<option value="Senior Flight Officer" data-adult="true">Senior Flight Officer</option>
+										<option value="2nd Lt." data-adult="true" selected>2nd Lt.</option>
+										<option value="1st Lt." data-adult="true">1st Lt.</option>
+										<option value="Capt." data-adult="true">Capt.</option>
+										<option value="Maj." data-adult="true">Maj.</option>
+										<option value="Lt. Col." data-adult="true">Lt. Col.</option>
+										<option value="Col." data-adult="true">Col.</option>
+										<option value="Brig. Gen." data-adult="true">Brig. Gen.</option>
+										<option value="Maj. Gen." data-adult="true">Maj. Gen.</option>
+									</optgroup>
 								</select>
 
 								<input type="text" id="name" placeholder="Jane Doe" />
@@ -133,6 +152,14 @@
 						</div>
 
 						<div class="form-section">
+							<div class="section-heading">
+								<h2>Duty Position(s)</h2>
+								<p>
+									List duty positions and unit names exactly as you want them to appear
+									on the card.
+								</p>
+							</div>
+
 							<label for="title">Duty Position</label>
 							<input type="text" id="title" placeholder="Operations Officer" />
 						</div>
@@ -143,6 +170,13 @@
 						</div>
 
 						<div class="form-section">
+							<div class="section-heading">
+								<h2>Address</h2>
+								<p>
+									Use line breaks only where needed to maintain readability.
+								</p>
+							</div>
+
 							<label for="address">Address</label>
 							<textarea
 								id="address"
@@ -151,6 +185,13 @@
 						</div>
 
 						<div class="form-section">
+							<div class="section-heading">
+								<h2>Phone Number(s)</h2>
+								<p>
+									Include one or two numbers, if needed.
+								</p>
+							</div>
+
 							<label>Phone Number(s)</label>
 
 							<div class="dual">
@@ -173,6 +214,13 @@
 						</div>
 
 						<div class="form-section">
+							<div class="section-heading">
+								<h2>Email Address</h2>
+								<p>
+									Use your official CAP email address when applicable.
+								</p>
+							</div>
+
 							<label for="email">Email Address</label>
 							<input type="text" id="email" placeholder="jdoe@cap.gov" />
 						</div>
