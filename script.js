@@ -4,7 +4,7 @@ let isError = false;
 let grade_type = "Adult";
 
 const vals = {
-	grade: "2nd Lt.",
+	grade: "",
 	name: "Jane Doe",
 	title: "",
 	unit: "",
@@ -24,15 +24,22 @@ function gateGrades() {
 		const isCadet = opt.getAttribute("data-cadet") === "true";
 		const isAdult = opt.getAttribute("data-adult") === "true";
 		const isAny = opt.getAttribute("data-any") === "true";
+		const isNhq = opt.getAttribute("data-nhq") === "true";
 
-		if (grade_type === "Adult") {
-			if (isAny) {
+		if (grade_type === "NHQ") {
+			opt.disabled = !isNhq;
+		} else if (grade_type === "Adult") {
+			if (isNhq) {
+				opt.disabled = true;
+			} else if (isAny) {
 				opt.disabled = false;
 			} else {
 				opt.disabled = isCadet;
 			}
 		} else if (grade_type === "Cadet") {
-			if (isAny) {
+			if (isNhq) {
+				opt.disabled = true;
+			} else if (isAny) {
 				opt.disabled = false;
 			} else {
 				opt.disabled = isAdult;
@@ -42,7 +49,9 @@ function gateGrades() {
 
 	const selected = gradeSelect.selectedOptions[0];
 	if (selected && selected.disabled) {
-		if (grade_type === "Cadet") {
+		if (grade_type === "NHQ") {
+			gradeSelect.value = "";
+		} else if (grade_type === "Cadet") {
 			gradeSelect.value = "Airman";
 		} else {
 			gradeSelect.value = "2nd Lt.";
@@ -97,26 +106,30 @@ function placeText(page, x, y) {
 	let gradeNameIsMultiline = false;
 	let gradeNameText = "";
 
-	let gradeText = (grade_type === "Cadet" ? "Cadet " : "") + vals.grade;
-	const gradeTextWidth = fontBold.widthOfTextAtSize(gradeText, 8);
+	let gradeText = vals.grade;
+	if (grade_type === "Cadet" && gradeText) {
+		gradeText = "Cadet " + gradeText;
+	}
 
-	if (gradeTextWidth > maxWidth && grade_type === "Cadet") {
+	const gradeTextWidth = fontBold.widthOfTextAtSize(gradeText || "", 8);
+
+	if (grade_type === "Cadet" && gradeText && gradeTextWidth > maxWidth) {
 		gradeText = "C/" + vals.grade;
 	}
 
 	const nameText = vals.name;
-	gradeNameText = (gradeText && gradeText + " ") + nameText;
+	gradeNameText = [gradeText, nameText].filter(Boolean).join(" ");
 
 	const gradeNameTextWidth = fontBold.widthOfTextAtSize(gradeNameText, 8);
 
 	if (gradeNameTextWidth > maxWidth) {
-		gradeNameText = (gradeText && gradeText + "\n") + nameText;
+		gradeNameText = [gradeText, nameText].filter(Boolean).join("\n");
 		gradeNameIsMultiline = true;
 
-		const gradeOnlyWidth = fontBold.widthOfTextAtSize(gradeText, 8);
+		const gradeOnlyWidth = fontBold.widthOfTextAtSize(gradeText || "", 8);
 		const nameOnlyWidth = fontBold.widthOfTextAtSize(nameText, 8);
 
-		if (gradeOnlyWidth > maxWidth || nameOnlyWidth > maxWidth) {
+		if ((gradeText && gradeOnlyWidth > maxWidth) || nameOnlyWidth > maxWidth) {
 			$("#name").addClass("error");
 			isError = true;
 		}
