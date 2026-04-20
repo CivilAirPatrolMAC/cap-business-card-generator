@@ -137,8 +137,11 @@ function getValidationWarnings() {
 		warnings.push('"SM" is not a valid CAP grade.');
 	}
 
-	if (/\b(MD|DO|PhD|EdD|DBA|DNP|PharmD|DDS|DMD|OD|JD|LLM|MA|MS|MBA|MPA|MEd|BA|BS|BBA|RN|NP|PA-C|CPA|CFA|PMP|CISSP|PE|CFI|CFII|ATP|A&P|Esq\.?)\b/i.test(combinedName)) {
-		warnings.push('Do not include professional titles or post-nominals such as "MD," "PhD," or "CFI."');
+	// Detect post-nominals at end of name (with or without comma)
+	const postNominalPattern = /(?:,|\s)\s*(MD|DO|PhD|EdD|DBA|DNP|PharmD|DDS|DMD|OD|JD|LLM|MA|MS|MBA|MPA|MEd|BA|BS|BBA|RN|NP|PA-C|CPA|CFA|PMP|CISSP|PE|CFI|CFII|ATP|A&P|Esq\.?)$/i;
+
+	if (postNominalPattern.test(nameValue)) {
+	warnings.push(`Do not include post-nominals in the name field. Invalid entry: "${nameValue}"`);
 	}
 
 	if (grade_type === "Adult" && /\bCadet\b/i.test(combinedName)) {
