@@ -1,6 +1,7 @@
-let font, fontBold;
+let font;
+let fontBold;
 let isError = false;
-let grade_type = "Senior";
+let grade_type = "Adult";
 
 const vals = {
 	grade: "2nd Lt.",
@@ -13,24 +14,45 @@ const vals = {
 	phone_2_type: "M",
 	phone_2: "",
 	email: "",
-	// grade: "Lt. Col.",
-	// name: "Matthew Congrove",
-	// title: "Public Affairs Staff Assistant",
-	// unit: "National Headquarters",
-	// address:
-	// 	"123 Flight Line Road\nBuilding C\nSomewhere, TX 12345",
-	// phone_1_type: "M",
-	// phone_1: "555-555-5555",
-	// phone_2_type: "M",
-	// phone_2: "555-555-5555",
-	// email: "mcongrove@cap.gov",
 };
+
+function gateGrades() {
+	const gradeSelect = document.getElementById("grade");
+	const options = Array.from(gradeSelect.querySelectorAll("option"));
+
+	for (const opt of options) {
+		const isCadet = opt.getAttribute("data-cadet") === "true";
+		const isAdult = opt.getAttribute("data-adult") === "true";
+		const isAny = opt.getAttribute("data-any") === "true";
+
+		if (grade_type === "Adult") {
+			if (isAny) {
+				opt.disabled = false;
+			} else {
+				opt.disabled = isCadet;
+			}
+		} else if (grade_type === "Cadet") {
+			if (isAny) {
+				opt.disabled = false;
+			} else {
+				opt.disabled = isAdult;
+			}
+		}
+	}
+
+	const selected = gradeSelect.selectedOptions[0];
+	if (selected && selected.disabled) {
+		if (grade_type === "Cadet") {
+			gradeSelect.value = "Airman";
+		} else {
+			gradeSelect.value = "2nd Lt.";
+		}
+	}
+}
 
 async function generatePdf() {
 	const url = "source.pdf";
-
 	const existingPdfBytes = await fetch(url).then((res) => res.arrayBuffer());
-
 	const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
 
 	pdfDoc.setTitle("CAP Business Card Template");
@@ -41,6 +63,7 @@ async function generatePdf() {
 
 	const pages = pdfDoc.getPages();
 	const pageFront = pages[0];
+
 	let rowY = 735.6;
 	const shiftY = 143.9;
 	const colX = 173;
@@ -49,36 +72,31 @@ async function generatePdf() {
 	placeText(pageFront, colX + 252, rowY);
 
 	rowY -= shiftY;
-
 	placeText(pageFront, colX, rowY);
 	placeText(pageFront, colX + 252, rowY);
 
 	rowY -= shiftY;
-
 	placeText(pageFront, colX, rowY);
 	placeText(pageFront, colX + 252, rowY);
 
 	rowY -= shiftY;
-
 	placeText(pageFront, colX, rowY);
 	placeText(pageFront, colX + 252, rowY);
 
 	rowY -= shiftY;
-
 	placeText(pageFront, colX, rowY);
 	placeText(pageFront, colX + 252, rowY);
 
 	const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
-
 	document.getElementById("pdf").src = pdfDataUri;
 }
 
 function placeText(page, x, y) {
 	const maxWidth = 121;
 
-	// GRADE / NAME
 	let gradeNameIsMultiline = false;
 	let gradeNameText = "";
+
 	let gradeText = (grade_type === "Cadet" ? "Cadet " : "") + vals.grade;
 	const gradeTextWidth = fontBold.widthOfTextAtSize(gradeText, 8);
 
@@ -86,18 +104,19 @@ function placeText(page, x, y) {
 		gradeText = "C/" + vals.grade;
 	}
 
-	let nameText = vals.name;
+	const nameText = vals.name;
 	gradeNameText = (gradeText && gradeText + " ") + nameText;
-	let gradeNameTextWidth = fontBold.widthOfTextAtSize(gradeNameText, 8);
+
+	const gradeNameTextWidth = fontBold.widthOfTextAtSize(gradeNameText, 8);
 
 	if (gradeNameTextWidth > maxWidth) {
 		gradeNameText = (gradeText && gradeText + "\n") + nameText;
 		gradeNameIsMultiline = true;
 
-		const gradeTextWidth = fontBold.widthOfTextAtSize(gradeText, 8);
-		const nameTextWidth = fontBold.widthOfTextAtSize(nameText, 8);
+		const gradeOnlyWidth = fontBold.widthOfTextAtSize(gradeText, 8);
+		const nameOnlyWidth = fontBold.widthOfTextAtSize(nameText, 8);
 
-		if (gradeTextWidth > maxWidth || nameTextWidth > maxWidth) {
+		if (gradeOnlyWidth > maxWidth || nameOnlyWidth > maxWidth) {
 			$("#name").addClass("error");
 			isError = true;
 		}
@@ -112,7 +131,6 @@ function placeText(page, x, y) {
 		color: PDFLib.rgb(0, 0.09411764706, 0.4431372549),
 	});
 
-	// TITLE / UNIT
 	if (vals.title || vals.unit) {
 		const titleTextWidth = font.widthOfTextAtSize(vals.title, 8);
 		const unitTextWidth = font.widthOfTextAtSize(vals.unit, 7);
@@ -141,12 +159,11 @@ function placeText(page, x, y) {
 	}
 
 	if (vals.address) {
-		let addressTextParts = vals.address.split("\n");
+		const addressTextParts = vals.address.split("\n");
 		let addressTextWidth = 0;
 
 		addressTextParts.forEach((part) => {
 			const w = font.widthOfTextAtSize(part, 7);
-
 			if (w > addressTextWidth) {
 				addressTextWidth = w;
 			}
@@ -223,22 +240,22 @@ function placeError(page) {
 }
 
 function updateInput() {
-	vals["grade"] = $("#grade").val();
+	vals.grade = $("#grade").val();
 
-	if ($("#name").val()) {
-		vals["name"] = $("#name").val();
+	if ($("#name").val().trim()) {
+		vals.name = $("#name").val().trim();
 	} else {
-		vals["name"] = "Jane Doe";
+		vals.name = "Jane Doe";
 	}
 
-	vals["title"] = $("#title").val();
-	vals["unit"] = $("#unit").val();
-	vals["address"] = $("#address").val();
-	vals["phone_1_type"] = $("#phone_1_type").val();
-	vals["phone_1"] = $("#phone_1").val();
-	vals["phone_2_type"] = $("#phone_2_type").val();
-	vals["phone_2"] = $("#phone_2").val();
-	vals["email"] = $("#email").val();
+	vals.title = $("#title").val().trim();
+	vals.unit = $("#unit").val().trim();
+	vals.address = $("#address").val().trim();
+	vals.phone_1_type = $("#phone_1_type").val();
+	vals.phone_1 = $("#phone_1").val().trim();
+	vals.phone_2_type = $("#phone_2_type").val();
+	vals.phone_2 = $("#phone_2").val().trim();
+	vals.email = $("#email").val().trim();
 
 	$("#name").removeClass("error");
 	$("#title").removeClass("error");
@@ -247,29 +264,26 @@ function updateInput() {
 	$("#email").removeClass("error");
 
 	isError = false;
-
 	generatePdf();
 }
 
 $(document).ready(function () {
-	generatePdf();
+	grade_type = $("#grade_type").val();
+	gateGrades();
+	updateInput();
 
-	$("#grade_type").change(function () {
+	$("#grade_type").on("change", function () {
 		grade_type = $(this).val();
-
-		// Gate the grades based on SM or Cadet
-		if (grade_type === "Senior") {
-			$('option[data-cadet="true"]').attr("disabled", "disabled");
-			$('option[data-senior="true"]').removeAttr("disabled");
-		} else {
-			$('option[data-senior="true"]').attr("disabled", "disabled");
-			$('option[data-cadet="true"]').removeAttr("disabled");
-		}
-
+		gateGrades();
 		updateInput();
 	});
 
-	$("#form").submit(function (e) {
+	$("#grade").on("change", updateInput);
+
+	$("#name, #title, #unit, #address, #phone_1_type, #phone_1, #phone_2_type, #phone_2, #email")
+		.on("input change blur", updateInput);
+
+	$("#form").on("submit", function (e) {
 		e.preventDefault();
 		updateInput();
 	});
