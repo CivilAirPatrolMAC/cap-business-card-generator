@@ -57,7 +57,7 @@ function renderValidationWarnings(items) {
 	const box = document.getElementById("validation_warnings");
 	if (!box) return;
 
-	if (!items.length) {
+	if (!items.length || !hasInteracted) {
 		box.style.display = "none";
 		box.innerHTML = "";
 		return;
@@ -154,7 +154,7 @@ function getValidationWarnings() {
 	}
 
 	if (titleValue && /,\s*CAP\b/i.test(titleValue)) {
-		warnings.push('Do not append ", CAP" to duty position text.');
+		warnings.push('Do not append ", CAP" to the text.');
 	}
 
 	if (unitValue && /,\s*CAP\b/i.test(unitValue)) {
@@ -166,7 +166,7 @@ function getValidationWarnings() {
 	}
 
 	if (emailValue && !isValidCapEmail(emailValue)) {
-		warnings.push("Email must end in @cap.gov or @cap.us.");
+		warnings.push("Email must point to @xxwg.cap.gov, @xxwg.cap.us, @cap.gov, or @cap.us.");
 	}
 
 	if (titleValue && titleValue.length > 40) {
@@ -195,6 +195,7 @@ function setActionLockState(isLocked) {
 
 	if (overlay) {
 		overlay.hidden = !isLocked;
+		overlay.style.display = isLocked ? "flex" : "none";
 	}
 }
 
@@ -405,21 +406,17 @@ function updateInput() {
 
 	isError = false;
 
-	if (hasInteracted) {
-		const warnings = getValidationWarnings();
-		renderValidationWarnings(warnings);
+	const warnings = hasInteracted ? getValidationWarnings() : [];
+	renderValidationWarnings(warnings);
 
-		const hasBlockingErrors =
-			!vals.name ||
-			(vals.email && !isValidCapEmail(vals.email));
+	const hasBlockingErrors = hasInteracted && (
+		!vals.name ||
+		(vals.email && !isValidCapEmail(vals.email))
+	);
 
-		setActionLockState(hasBlockingErrors);
-	} else {
-		renderValidationWarnings([]);
-		setActionLockState(false);
-	}
+	setActionLockState(hasBlockingErrors);
 
-	if (!isValidCapEmail(vals.email)) {
+	if (!isValidCapEmail(vals.email) && hasInteracted) {
 		$("#email").addClass("error");
 		isError = true;
 	}
@@ -430,6 +427,10 @@ function updateInput() {
 $(document).ready(function () {
 	grade_type = $("#grade_type").val();
 	gateGrades();
+
+	// Force clean initial state
+	renderValidationWarnings([]);
+	setActionLockState(false);
 
 	$("#phone_1, #phone_2").on("input", function () {
 		hasInteracted = true;
@@ -445,15 +446,6 @@ $(document).ready(function () {
 
 	$("#email").on("input blur change", function () {
 		hasInteracted = true;
-
-		const value = $(this).val().trim();
-
-		if (value === "" || isValidCapEmail(value)) {
-			$(this).removeClass("error");
-		} else {
-			$(this).addClass("error");
-		}
-
 		updateInput();
 	});
 
@@ -475,6 +467,7 @@ $(document).ready(function () {
 			updateInput();
 		});
 
+	// Preview only on load, no validation state
 	generatePdf();
 
 	$("#form").on("submit", function (e) {
