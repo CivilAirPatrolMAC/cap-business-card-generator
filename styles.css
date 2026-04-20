@@ -89,6 +89,13 @@ button {
 	box-shadow: var(--shadow-md);
 }
 
+.field-note {
+	margin: 0.5rem 0 0;
+	font-size: 0.9rem;
+	line-height: 1.5;
+	color: var(--text-soft);
+}
+
 .page-header__content {
 	max-width: 760px;
 }
