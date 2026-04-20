@@ -263,7 +263,6 @@ function placeText(page, x, y) {
 		});
 	}
 
-	placeError(page);
 }
 
 /*function placeError(page) {
