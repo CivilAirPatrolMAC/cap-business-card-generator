@@ -199,7 +199,7 @@
 							<div class="section-heading">
 								<h2>Phone Number(s)</h2>
 								<p>
-									Include one or two numbers, if needed.
+									Phone numbers are automatically formatted with periods between number groups.
 								</p>
 							</div>
 
@@ -211,7 +211,7 @@
 									<option value="H">Home</option>
 									<option value="O">Office</option>
 								</select>
-								<input type="text" id="phone_1" placeholder="555-555-5555" />
+								<input type="text" id="phone_1" placeholder="555.555.5555" inputmode="numeric" />
 							</div>
 
 							<div class="dual">
@@ -220,7 +220,7 @@
 									<option value="H">Home</option>
 									<option value="O">Office</option>
 								</select>
-								<input type="text" id="phone_2" placeholder="555-555-5555" />
+								<input type="text" id="phone_2" placeholder="555.555.5555" inputmode="numeric" />
 							</div>
 						</div>
 
@@ -228,12 +228,13 @@
 							<div class="section-heading">
 								<h2>Email Address</h2>
 								<p>
-									Use your official CAP email address when applicable.
+									Only official Civil Air Patrol email domains are accepted.
 								</p>
 							</div>
 
 							<label for="email">Email Address</label>
 							<input type="text" id="email" placeholder="jdoe@cap.gov" />
+							<p class="field-note">Only <code>@cap.gov</code> and <code>@cap.us</code> email addresses are allowed.</p>
 						</div>
 
 						<div class="form-section form-actions">
