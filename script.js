@@ -48,9 +48,9 @@ function autoFormatPhoneInput(el) {
 	}
 }
 
-function isValidCapEmail(email) {
+function isValidEmail(email) {
 	if (!email) return true;
-	return /^[A-Z0-9._%+-]+@cap\.(gov|us)$/i.test(email);
+	return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 function renderValidationWarnings(items) {
@@ -137,9 +137,8 @@ function getValidationWarnings() {
 		warnings.push('"SM" is not a valid CAP grade.');
 	}
 
-	// Fixed post-nominal detector
 	const postNominalPattern =
-		/(?:,|\s)\s*(MD|DO|PhD|EdD|DBA|DNP|PharmD|DDS|DMD|OD|JD|LLM|MA|MS|MBA|MPA|MEd|BA|BS|BBA|RN|NP|PA-C|CPA|CFA|PMP|CFM|SHRM-CP|SHRM-SCP|CISSP|PE|CFI|CFII|ATP|A&P|Esq\.?|FACHE|FRCP|EMT|EMT-P|EMT-B|EMT-A|EMT-P|EMT-LP|AEM|CEM)\.?$/i;
+		/(?:,|\s)\s*(MD|DO|PhD|EdD|DBA|DNP|PharmD|DDS|DMD|OD|JD|LLM|MA|MS|MBA|MPA|MEd|BA|BS|BBA|RN|NP|PA-C|CPA|CFA|PMP|CFM|SHRM-CP|SHRM-SCP|CISSP|PE|CFI|CFII|ATP|A&P|Esq\.?|FACHE|FRCP|EMT|EMT-B|EMT-A|EMT-P|EMT-LP|AEM|CEM)\.?$/i;
 
 	if (postNominalPattern.test(nameValue)) {
 		warnings.push(`Do not include post-nominals in the name field. Invalid entry: "${nameValue}"`);
@@ -169,8 +168,8 @@ function getValidationWarnings() {
 		warnings.push("Address should not exceed 3 lines.");
 	}
 
-	if (emailValue && !isValidCapEmail(emailValue)) {
-		warnings.push("Email must be an official CAP email domain");
+	if (emailValue && !isValidEmail(emailValue)) {
+		warnings.push("Enter a valid email address.");
 	}
 
 	if (titleValue && titleValue.length > 40) {
@@ -387,13 +386,7 @@ function updateInput() {
 	autoFormatPhoneInput(document.getElementById("phone_2"));
 
 	vals.grade = $("#grade").val();
-
-	if ($("#name").val().trim()) {
-		vals.name = $("#name").val().trim();
-	} else {
-		vals.name = "Jane Doe";
-	}
-
+	vals.name = $("#name").val().trim() || "Jane Doe";
 	vals.title = $("#title").val().trim();
 	vals.unit = $("#unit").val().trim();
 	vals.address = $("#address").val().trim();
@@ -417,7 +410,7 @@ function updateInput() {
 	const hasBlockingErrors = hasInteracted && warnings.length > 0;
 	setActionLockState(hasBlockingErrors);
 
-	if (!isValidCapEmail(vals.email) && hasInteracted) {
+	if (!isValidEmail(vals.email) && hasInteracted) {
 		$("#email").addClass("error");
 		isError = true;
 	}
