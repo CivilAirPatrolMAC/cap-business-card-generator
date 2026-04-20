@@ -128,7 +128,7 @@ async function generatePdf() {
 }
 
 function placeText(page, x, y) {
-	const maxWidth = 121;
+	const maxWidth = 140;
 
 	let gradeNameIsMultiline = false;
 	let gradeNameText = "";
