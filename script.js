@@ -16,6 +16,15 @@ const vals = {
 	email: "",
 };
 
+function sanitizeText(s) {
+	return String(s)
+		.replaceAll("&", "&amp;")
+		.replaceAll("<", "&lt;")
+		.replaceAll(">", "&gt;")
+		.replaceAll('"', "&quot;")
+		.replaceAll("'", "&#39;");
+}
+
 function formatPhoneDisplay(value) {
 	let digits = String(value || "").replace(/\D/g, "");
 
@@ -86,6 +95,103 @@ function gateGrades() {
 	}
 }
 
+function getValidationWarnings() {
+	const warnings = [];
+
+	const gradeValue = String(vals.grade || "").trim();
+	const nameValue = String(vals.name || "").trim();
+	const titleValue = String(vals.title || "").trim();
+	const unitValue = String(vals.unit || "").trim();
+	const addressValue = String(vals.address || "").trim();
+	const emailValue = String(vals.email || "").trim();
+
+	const combinedName = [gradeValue, nameValue].filter(Boolean).join(" ").trim();
+
+	if (!nameValue) {
+		warnings.push("Name is required.");
+	}
+
+	if (/\bSM\b/i.test(combinedName)) {
+		warnings.push('"SM" is not a grade and should not be used.');
+	}
+
+	if (/\b(MD|DO|PhD|EdD|DBA|DNP|PharmD|DDS|DMD|OD|JD|LLM|MA|MS|MBA|MPA|MEd|BA|BS|BBA|RN|NP|PA-C|CPA|CFA|PMP|CISSP|PE|CFI|CFII|ATP|A&P|Esq\.?)\b/i.test(combinedName)) {
+		warnings.push('Do not include professional titles or post-nominals such as "MD," "PhD," or "CFI."');
+	}
+
+	if (grade_type === "Adult" && /\bCadet\b/i.test(combinedName)) {
+		warnings.push('Adult Volunteer entries should not include the word "Cadet" in the name line.');
+	}
+
+	if (grade_type === "NHQ" && gradeValue && !/^(Mr\.|Ms\.|Mrs\.)$/i.test(gradeValue)) {
+		warnings.push("NHQ Staff may only use no grade or an approved courtesy title.");
+	}
+
+	if (titleValue && /(certified|certification|award|graduate|distinguished|quote|")/i.test(titleValue)) {
+		warnings.push("Do not list certifications, accomplishments, or quotes in the duty position field.");
+	}
+
+	if (titleValue && /,\s*CAP\b/i.test(titleValue)) {
+		warnings.push('Do not append ", CAP" to duty position text.');
+	}
+
+	if (unitValue && /,\s*CAP\b/i.test(unitValue)) {
+		warnings.push('Do not append ", CAP" to the unit name.');
+	}
+
+	if (addressValue.split(/\r?\n/).length > 3) {
+		warnings.push("Address should be limited to three lines for best fit.");
+	}
+
+	if (emailValue && !isValidCapEmail(emailValue)) {
+		warnings.push("Email address must end in @cap.gov or @cap.us.");
+	}
+
+	return warnings;
+}
+
+function renderValidationWarnings(items) {
+	const box = document.getElementById("validation_warnings");
+	if (!box) return;
+
+	if (!items.length) {
+		box.style.display = "none";
+		box.innerHTML = "";
+		return;
+	}
+
+	let html = "<h3>Brand standards review</h3><ul>";
+	for (const item of items) {
+		html += "<li>" + sanitizeText(item) + "</li>";
+	}
+	html += "</ul>";
+
+	box.style.display = "block";
+	box.innerHTML = html;
+}
+
+function setActionLockState(isLocked) {
+	const updateButton = document.getElementById("update_button");
+	const preview = document.getElementById("pdf");
+	const overlay = document.getElementById("preview_overlay");
+
+	if (updateButton) {
+		updateButton.disabled = isLocked;
+		updateButton.classList.toggle("button--disabled", isLocked);
+		updateButton.title = isLocked
+			? "Resolve brand standard warnings before proceeding."
+			: "";
+	}
+
+	if (preview) {
+		preview.classList.toggle("preview-disabled", isLocked);
+	}
+
+	if (overlay) {
+		overlay.hidden = !isLocked;
+	}
+}
+
 async function generatePdf() {
 	const url = "source.pdf";
 	const existingPdfBytes = await fetch(url).then((res) => res.arrayBuffer());
@@ -128,7 +234,7 @@ async function generatePdf() {
 }
 
 function placeText(page, x, y) {
-	const maxWidth = 140;
+	const maxWidth = 121;
 
 	let gradeNameIsMultiline = false;
 	let gradeNameText = "";
@@ -262,22 +368,8 @@ function placeText(page, x, y) {
 			color: PDFLib.rgb(0, 0, 0),
 		});
 	}
-
 }
 
-/*function placeError(page) {
-	if (isError) {
-		page.drawText("TEXT IS TOO LONG", {
-			x: 140,
-			y: 700,
-			size: 50,
-			font: font,
-			color: PDFLib.rgb(1, 0, 0),
-			rotate: PDFLib.degrees(-45),
-		});
-	}
-}
-*/
 function updateInput() {
 	autoFormatPhoneInput(document.getElementById("phone_1"));
 	autoFormatPhoneInput(document.getElementById("phone_2"));
@@ -306,6 +398,10 @@ function updateInput() {
 	$("#email").removeClass("error");
 
 	isError = false;
+
+	const warnings = getValidationWarnings();
+	renderValidationWarnings(warnings);
+	setActionLockState(warnings.length > 0);
 
 	if (!isValidCapEmail(vals.email)) {
 		$("#email").addClass("error");
