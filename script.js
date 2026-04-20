@@ -139,7 +139,7 @@ function getValidationWarnings() {
 
 	// Fixed post-nominal detector
 	const postNominalPattern =
-		/(?:,|\s)\s*(MD|DO|PhD|EdD|DBA|DNP|PharmD|DDS|DMD|OD|JD|LLM|MA|MS|MBA|MPA|MEd|BA|BS|BBA|RN|NP|PA-C|CPA|CFA|PMP|CFM|SHRM-CP|SHRM-SCP|CISSP|PE|CFI|CFII|ATP|A&P|Esq\.?|FACHE|FRCP|EMT-B|EMT-A|EMT-P|EMT-LP|AEM|CEM)\.?$/i;
+		/(?:,|\s)\s*(MD|DO|PhD|EdD|DBA|DNP|PharmD|DDS|DMD|OD|JD|LLM|MA|MS|MBA|MPA|MEd|BA|BS|BBA|RN|NP|PA-C|CPA|CFA|PMP|CFM|SHRM-CP|SHRM-SCP|CISSP|PE|CFI|CFII|ATP|A&P|Esq\.?|FACHE|FRCP|EMT|EMT-P|EMT-B|EMT-A|EMT-P|EMT-LP|AEM|CEM)\.?$/i;
 
 	if (postNominalPattern.test(nameValue)) {
 		warnings.push(`Do not include post-nominals in the name field. Invalid entry: "${nameValue}"`);
