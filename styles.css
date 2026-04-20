@@ -577,3 +577,31 @@ textarea {
 		min-height: 420px;
 	}
 }
+
+.validation-box {
+	margin: 1rem 1.25rem 0;
+	padding: 14px 16px;
+	border: 1px solid #f2b8bf;
+	border-left: 4px solid rgb(186, 12, 47);
+	border-radius: 10px;
+	background: #fff5f5;
+}
+
+.validation-box h3 {
+	margin: 0 0 8px;
+	font-size: 16px;
+	font-weight: 700;
+	color: #001489;
+}
+
+.validation-box ul {
+	margin: 0 0 0 18px;
+	padding: 0;
+	list-style: disc;
+}
+
+.validation-box li {
+	margin: 6px 0;
+	line-height: 1.45;
+}
+
