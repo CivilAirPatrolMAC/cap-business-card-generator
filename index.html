@@ -88,6 +88,8 @@
 				</article>
 
 				<article class="card form-card">
+					<div id="validation_warnings" class="validation-box" style="display: none;"></div>
+
 					<form id="form" class="generator-form">
 						<div class="form-section">
 							<div class="section-heading">
@@ -238,7 +240,7 @@
 						</div>
 
 						<div class="form-section form-actions">
-							<button type="submit" class="button--primary">Update Preview</button>
+							<button type="submit" id="update_button" class="button--primary">Update Preview</button>
 						</div>
 					</form>
 				</article>
@@ -258,6 +260,11 @@
 
 						<div class="preview-frame">
 							<iframe id="pdf" title="Business Card Preview"></iframe>
+							<div id="preview_overlay" class="preview-overlay" hidden>
+								<div class="preview-overlay__content">
+									Fix brand standard warnings to re-enable preview interaction.
+								</div>
+							</div>
 						</div>
 					</article>
 				</div>
