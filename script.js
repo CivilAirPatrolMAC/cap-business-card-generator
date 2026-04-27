@@ -6,6 +6,7 @@ let hasInteracted = false;
 
 const vals = {
 	grade: "",
+	is_chaplain_adult: false,
 	name: "Jane Doe",
 	title: "",
 	unit: "",
@@ -114,6 +115,18 @@ function gateGrades() {
 		} else {
 			gradeSelect.value = "2nd Lt.";
 		}
+	}
+
+	const chaplainRow = document.getElementById("chaplain_option_row");
+	const chaplainCheckbox = document.getElementById("chaplain_prefix");
+	const isAdultVolunteer = grade_type === "Adult";
+
+	if (chaplainRow) {
+		chaplainRow.style.display = isAdultVolunteer ? "flex" : "none";
+	}
+
+	if (!isAdultVolunteer && chaplainCheckbox) {
+		chaplainCheckbox.checked = false;
 	}
 }
 
@@ -251,6 +264,9 @@ function placeText(page, x, y) {
 	let gradeNameText = "";
 
 	let gradeText = vals.grade;
+	if (vals.is_chaplain_adult && grade_type === "Adult" && gradeText) {
+		gradeText = "Ch., " + gradeText;
+	}
 	if (grade_type === "Cadet" && gradeText) {
 		gradeText = "Cadet " + gradeText;
 	}
@@ -386,6 +402,7 @@ function updateInput() {
 	autoFormatPhoneInput(document.getElementById("phone_2"));
 
 	vals.grade = $("#grade").val();
+	vals.is_chaplain_adult = grade_type === "Adult" && $("#chaplain_prefix").is(":checked");
 	vals.name = $("#name").val().trim() || "Jane Doe";
 	vals.title = $("#title").val().trim();
 	vals.unit = $("#unit").val().trim();
@@ -461,7 +478,7 @@ $(document).ready(function () {
 		updateInput();
 	});
 
-	$("#name, #title, #unit, #address, #phone_1_type, #phone_2_type")
+	$("#name, #title, #unit, #address, #phone_1_type, #phone_2_type, #chaplain_prefix")
 		.on("input change blur", function () {
 			hasInteracted = true;
 			updateInput();
